@@ -20,7 +20,7 @@ public class HomeView extends VerticalLayout {
         signUpButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         signUpButton.addClassName("button-hover-effect");
         signUpButton.addClickListener(event -> {
-            UI.getCurrent().navigate("SignUp");
+            UI.getCurrent().navigate("signUp");
         });
 
         Button LoginButton = new Button("Login");
