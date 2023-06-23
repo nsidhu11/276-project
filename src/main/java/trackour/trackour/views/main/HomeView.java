@@ -4,7 +4,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -21,14 +20,14 @@ public class HomeView extends VerticalLayout {
         signUpButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         signUpButton.addClassName("button-hover-effect");
         signUpButton.addClickListener(event -> {
-            UI.getCurrent().navigate("SignUpView.java");
+            UI.getCurrent().navigate("SignUp");
         });
 
         Button LoginButton = new Button("Login");
         LoginButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         LoginButton.addClassName("button-hover-effect");
-        signUpButton.addClickListener(event -> {
-            UI.getCurrent().navigate("LoginPage.java");
+        LoginButton.addClickListener(event -> {
+            UI.getCurrent().navigate("login");
         });
 
         ComboBox<String> languageComboBox = new ComboBox<>();
