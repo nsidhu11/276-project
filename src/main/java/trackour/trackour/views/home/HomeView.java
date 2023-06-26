@@ -1,5 +1,6 @@
 package trackour.trackour.views.home;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -12,13 +13,19 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 import jakarta.annotation.security.PermitAll;
+import trackour.trackour.models.CustomUserDetailsService;
+import trackour.trackour.security.SecurityService;
 
 @Route("")
 @PermitAll
 public class HomeView extends VerticalLayout {
-    public HomeView() {
+    public HomeView(SecurityService securityService, CustomUserDetailsService customUserDetailsService) {
         H1 header = new H1("Trackour");
-
+        
+        String sessionUsername = securityService.getAuthenticatedUser().getUsername();
+        // since logged in, no need to verify if this optional is empty
+        String displayNameString = customUserDetailsService.getByUsername(sessionUsername).get().getDisplayName();
+        Text displayNameTxt = new Text("@" + displayNameString);
         Button signUpButton = new Button("Sign Up");
         signUpButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         signUpButton.addClassName("button-hover-effect");
@@ -40,7 +47,7 @@ public class HomeView extends VerticalLayout {
         TextField searchField = new TextField();
         searchField.setPlaceholder("Search Any Music");
 
-        HorizontalLayout topNavButtons = new HorizontalLayout(signUpButton, LoginButton);
+        HorizontalLayout topNavButtons = new HorizontalLayout(displayNameTxt, LoginButton);
         topNavButtons.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         topNavButtons.getStyle().set("gap", "10px"); // Add spacing between the buttons
 

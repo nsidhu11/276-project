@@ -17,8 +17,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import trackour.trackour.security.PassHasherSHA256;
-
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository repository;
@@ -113,12 +111,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         return false;
     }
 
-    private void doSecurePassword(User newUser, String password) {
-        // hash -(then)-> encrypt
-        PassHasherSHA256 hasher1 = new PassHasherSHA256(password);
-        String encodedPassword = passwordEncoder().encode(hasher1.getHashedPassword());
-        String encodePasswordSalt = passwordEncoder().encode(hasher1.getHashedSalt());
-        newUser.setPassword(encodedPassword);
-        newUser.setPasswordSalt(encodePasswordSalt);
-    }
+    // private void doSecurePassword(User newUser, String password) {
+    //     // hash -(then)-> encrypt
+    //     PassHasherSHA256 hasher1 = new PassHasherSHA256(password);
+    //     String encodedPassword = passwordEncoder().encode(hasher1.getHashedPassword());
+    //     String encodePasswordSalt = passwordEncoder().encode(hasher1.getHashedSalt());
+    //     newUser.setPassword(encodedPassword);
+    //     newUser.setPasswordSalt(encodePasswordSalt);
+    // }
 }
