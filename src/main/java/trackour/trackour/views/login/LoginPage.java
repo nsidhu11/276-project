@@ -1,11 +1,7 @@
 package trackour.trackour.views.login;
-
-import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.BeforeLeaveEvent;
@@ -14,8 +10,6 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-
-import trackour.trackour.security.PassHasherSHA256;
 import trackour.trackour.security.SecurityViewHandler;
 import trackour.trackour.views.signup.SignUpView;
 
@@ -46,12 +40,6 @@ public class LoginPage extends VerticalLayout implements BeforeLeaveObserver, Be
         RouterLink signUpLink = new RouterLink("or Signup", SignUpView.class);
 
         add(new H1("Trackour"), login, signUpLink);
-    }
-
-    public void buttonClick(ClickEvent<Button> event, String textOg, TextField field1, TextField field2) {
-        PassHasherSHA256 hasher = new PassHasherSHA256(textOg);
-        field1.setValue(hasher.getHashedPassword());
-        field2.setValue(hasher.getHashedSalt());
     }
 
     @Override

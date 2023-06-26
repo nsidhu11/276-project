@@ -23,14 +23,14 @@ public class User {
         this.initRoles();
     }
 
-    public User(String username, String displayName, String password, String password_salt, String email, Set<Role> roles) {
+    public User(String username, String displayName, String password, String email, Set<Role> roles) {
         this.username = username;
         this.displayName = displayName;
         this.password = password;
         this.email = email;
     }
 
-    public User(String username, String displayName, String password, String password_salt, String email) {
+    public User(String username, String displayName, String password, String email) {
         this.username = username;
         this.displayName = displayName;
         this.password = password;
@@ -51,8 +51,6 @@ public class User {
     // so they aren't visible
     @JsonIgnore
     private String password;
-    @JsonIgnore
-    private String passwordSalt;
 
     @Column(name = "email")
     private String email;

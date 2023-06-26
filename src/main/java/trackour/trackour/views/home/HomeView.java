@@ -24,8 +24,8 @@ public class HomeView extends VerticalLayout {
         
         String sessionUsername = securityService.getAuthenticatedUser().getUsername();
         // since logged in, no need to verify if this optional is empty
-        String displayNameString = customUserDetailsService.getByUsername(sessionUsername).get().getDisplayName();
-        Text displayNameTxt = new Text("@" + displayNameString);
+        // String displayNameString = customUserDetailsService.getByUsername(sessionUsername).get().getDisplayName();
+        Text displayNameTxt = new Text("@" + sessionUsername);
         Button signUpButton = new Button("Sign Up");
         signUpButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         signUpButton.addClassName("button-hover-effect");

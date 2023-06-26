@@ -98,9 +98,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         // doSecurePassword(newUser, password);
         // unable to properly implement hashing technique atm so will either drop that or tryb again later
         String encodedPassword = passwordEncoder().encode(password);
-        String encodePasswordSalt = passwordEncoder().encode(password);
         newUser.setPassword(encodedPassword);
-        newUser.setPasswordSalt(encodePasswordSalt);
         printUserObj(newUser);
         // if user doesn't already exist do new registration
         Optional<User> existingUser = getByUsername(username);
@@ -110,13 +108,4 @@ public class CustomUserDetailsService implements UserDetailsService {
         }   
         return false;
     }
-
-    // private void doSecurePassword(User newUser, String password) {
-    //     // hash -(then)-> encrypt
-    //     PassHasherSHA256 hasher1 = new PassHasherSHA256(password);
-    //     String encodedPassword = passwordEncoder().encode(hasher1.getHashedPassword());
-    //     String encodePasswordSalt = passwordEncoder().encode(hasher1.getHashedSalt());
-    //     newUser.setPassword(encodedPassword);
-    //     newUser.setPasswordSalt(encodePasswordSalt);
-    // }
 }
