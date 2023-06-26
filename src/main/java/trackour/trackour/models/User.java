@@ -3,9 +3,10 @@ package trackour.trackour.models;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.Data;
-import trackour.trackour.security.PassHasherSHA256;
 
 @Entity
 @Data
@@ -47,8 +48,10 @@ public class User {
     
     private String displayName;
 
-
+    // so they aren't visible
+    @JsonIgnore
     private String password;
+    @JsonIgnore
     private String passwordSalt;
 
     @Column(name = "email")
@@ -70,16 +73,5 @@ public class User {
         Set<Role> test = new HashSet<>();
         test.add(Role.USER);
         setRoles(test);
-    }
-
-    // set pass
-    public void setPassword(String password) {
-        PassHasherSHA256 passHasher = new PassHasherSHA256(password);
-        this.password = passHasher.getHashedPassword();
-        setPasswordSalt(passHasher.getHashedSalt());
-    }
-
-    public void setPasswordSalt(String saltHashed) {
-        this.passwordSalt = saltHashed;
     }
 }

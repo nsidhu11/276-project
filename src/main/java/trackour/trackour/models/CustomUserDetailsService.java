@@ -95,10 +95,14 @@ public class CustomUserDetailsService implements UserDetailsService {
      * @param password
      */
     public boolean registerUser(String username, String password) {
-        // TODO: probably should add some credentials validation here.
         User newUser = new User();
         newUser.setUsername(username);
-        doSecurePassword(newUser, password);
+        // doSecurePassword(newUser, password);
+        // unable to properly implement hashing technique atm so will either drop that or tryb again later
+        String encodedPassword = passwordEncoder().encode(password);
+        String encodePasswordSalt = passwordEncoder().encode(password);
+        newUser.setPassword(encodedPassword);
+        newUser.setPasswordSalt(encodePasswordSalt);
         printUserObj(newUser);
         // if user doesn't already exist do new registration
         Optional<User> existingUser = getByUsername(username);
