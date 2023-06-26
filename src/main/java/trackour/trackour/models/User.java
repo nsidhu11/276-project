@@ -5,6 +5,7 @@ import java.util.Set;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import trackour.trackour.security.PassHasherSHA256;
 
 @Entity
 @Data
@@ -48,7 +49,7 @@ public class User {
 
 
     private String password;
-    private String password_salt;
+    private String passwordSalt;
 
     @Column(name = "email")
     private String email;
@@ -69,5 +70,16 @@ public class User {
         Set<Role> test = new HashSet<>();
         test.add(Role.USER);
         setRoles(test);
+    }
+
+    // set pass
+    public void setPassword(String password) {
+        PassHasherSHA256 passHasher = new PassHasherSHA256(password);
+        this.password = passHasher.getHashedPassword();
+        setPasswordSalt(passHasher.getHashedSalt());
+    }
+
+    private void setPasswordSalt(String saltHashed) {
+        this.passwordSalt = saltHashed;
     }
 }
