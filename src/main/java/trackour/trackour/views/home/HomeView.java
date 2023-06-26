@@ -1,4 +1,4 @@
-package trackour.trackour.views.main;
+package trackour.trackour.views.home;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
