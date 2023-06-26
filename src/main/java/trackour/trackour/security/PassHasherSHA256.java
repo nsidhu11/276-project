@@ -11,7 +11,7 @@ public class PassHasherSHA256 {
     private String hashedPassword;
     private String hashedSalt;
 
-    PassHasherSHA256(String rawPassString) {
+    public PassHasherSHA256(String rawPassString) {
         this.rawPassString = rawPassString;
         // this.hashedPassword = rawPassString;
         // Select SHA-256 hashing
