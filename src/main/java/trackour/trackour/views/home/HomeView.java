@@ -15,11 +15,12 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import trackour.trackour.models.CustomUserDetailsService;
 import trackour.trackour.security.SecurityService;
+import trackour.trackour.security.SecurityViewHandler;
 
 @Route("")
 @PermitAll
 public class HomeView extends VerticalLayout {
-    public HomeView(SecurityService securityService, CustomUserDetailsService customUserDetailsService) {
+    public HomeView(SecurityViewHandler securityViewHandler, SecurityService securityService, CustomUserDetailsService customUserDetailsService) {
         H1 header = new H1("Trackour");
         
         String sessionUsername = securityService.getAuthenticatedUser().getUsername();
@@ -33,11 +34,11 @@ public class HomeView extends VerticalLayout {
             UI.getCurrent().navigate("signUp");
         });
 
-        Button LoginButton = new Button("Login");
+        Button LoginButton = new Button("Logout");
         LoginButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         LoginButton.addClassName("button-hover-effect");
         LoginButton.addClickListener(event -> {
-            UI.getCurrent().navigate("login");
+            securityViewHandler.logOut();
         });
 
         ComboBox<String> languageComboBox = new ComboBox<>();

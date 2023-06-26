@@ -13,6 +13,7 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.BeforeLeaveEvent;
@@ -64,6 +65,7 @@ public class SignUpView extends VerticalLayout implements BeforeEnterObserver, B
         signupI18nForm.setSubmit("Sign up");
         signupI18nForm.setForgotPassword(null);
         signupI18n.setForm(signupI18nForm);
+        TextField displayNameField = new TextField("Display name", "Display name");
 
         // default error message
         i18nErrorMessage = signupI18n.getErrorMessage();
@@ -115,7 +117,7 @@ public class SignUpView extends VerticalLayout implements BeforeEnterObserver, B
 
         RouterLink loginLink = new RouterLink("or Login", LoginPage.class);
 
-        add(new H1("Trackour"), signupForm, loginLink);
+        add(new H1("Trackour"), signupForm, displayNameField, loginLink);
         // constructor end
     }
 
