@@ -3,16 +3,27 @@ package trackour.trackour.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="Users")
+@Table(
+    name="Users", 
+    uniqueConstraints=
+        @UniqueConstraint(
+            columnNames={"uid", "username", "email"}
+            )
+        )
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "uid")
     private int uid;
 
-    
+    @Column(name = "username")
     private String username;
+
+    
     private String displayName;
     private String password;
+
+    @Column(name = "email")
     private String email;
 
     public User() {}
