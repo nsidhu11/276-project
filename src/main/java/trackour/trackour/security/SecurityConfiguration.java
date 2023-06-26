@@ -1,8 +1,10 @@
 package trackour.trackour.security;
-
-import trackour.trackour.data.service.CustomUserDetailsServiceImplementation;
-import trackour.trackour.views.login.LoginView;
 import com.vaadin.flow.spring.security.VaadinWebSecurity;
+
+import trackour.trackour.models.CustomUserDetailsService;
+import trackour.trackour.views.login.LoginPage;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,9 +20,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @Configuration
 public class SecurityConfiguration extends VaadinWebSecurity {
 
-    CustomUserDetailsServiceImplementation customUserDetailsService;
+    @Autowired
+    CustomUserDetailsService customUserDetailsService;
 
-    SecurityConfiguration(CustomUserDetailsServiceImplementation customUserDetailsService) {
+    SecurityConfiguration(CustomUserDetailsService customUserDetailsService) {
         this.customUserDetailsService = customUserDetailsService;
     }
 
@@ -59,7 +62,7 @@ public class SecurityConfiguration extends VaadinWebSecurity {
         super.configure(http);
         
         // Register your login view to the view access checker mechanism
-        setLoginView(http, LoginView.class,"/login");
+        setLoginView(http, LoginPage.class,"/login");
     }
     
 }

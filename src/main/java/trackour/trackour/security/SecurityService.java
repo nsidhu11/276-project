@@ -1,6 +1,7 @@
 package trackour.trackour.security;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.vaadin.flow.spring.security.AuthenticationContext;
 
@@ -13,6 +14,7 @@ import com.vaadin.flow.spring.security.AuthenticationContext;
  * Other dependecy injections will do to 
  */
 @Component
+@Service
 public class SecurityService {
 
     private final AuthenticationContext authContext;
