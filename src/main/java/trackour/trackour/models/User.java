@@ -79,7 +79,7 @@ public class User {
         setPasswordSalt(passHasher.getHashedSalt());
     }
 
-    private void setPasswordSalt(String saltHashed) {
+    public void setPasswordSalt(String saltHashed) {
         this.passwordSalt = saltHashed;
     }
 }
