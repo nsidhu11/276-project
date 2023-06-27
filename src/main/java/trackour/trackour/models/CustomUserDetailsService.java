@@ -48,6 +48,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         return repository.findByUsername(username);
     }
 
+    public Optional<User> getByEmail(String email) {
+        return repository.findByEmail(email);
+    }
+
     public User update(User entity) {
         return repository.saveAndFlush(entity);
     }

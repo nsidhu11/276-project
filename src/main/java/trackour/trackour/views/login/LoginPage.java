@@ -1,7 +1,10 @@
 package trackour.trackour.views.login;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.BeforeLeaveEvent;
@@ -37,10 +40,34 @@ public class LoginPage extends VerticalLayout implements BeforeLeaveObserver, Be
         // submit action
         login.setAction("login");
 
+        Dialog resetPassDialog = handleForgotPasswordDialog();
+
+        login.addForgotPasswordListener(ev -> {
+            resetPassDialog.open();
+        });
+
         // link to signup page
         RouterLink signUpLink = new RouterLink("or Signup", SignupPageView.class);
 
-        add(new H1("Trackour"), login, signUpLink);
+        add(new H1("Trackour"), login, signUpLink, resetPassDialog);
+    }
+
+    Dialog handleForgotPasswordDialog() {
+        Dialog dialog = new Dialog();
+
+        VerticalLayout resetDialogLayout = new VerticalLayout();
+
+        EmailField dialogEmailField = new EmailField("Email");
+
+        dialog.setHeaderTitle("Forgot Password");
+        Button saveButton = new Button("Send", e -> dialog.close());
+        Button cancelButton = new Button("Cancel", e -> dialog.close());
+
+        resetDialogLayout.add(dialogEmailField);
+        dialog.add(resetDialogLayout);
+        dialog.getFooter().add(cancelButton);
+        dialog.getFooter().add(saveButton);
+        return dialog;
     }
 
     @Override

@@ -62,6 +62,10 @@ public class User {
 
     @Column(name = "username")
     private String username;
+
+    @JsonIgnore
+    @Column(name = "passwordResetToken")
+    private String passwordResetToken;
     
     private String displayName;
 
