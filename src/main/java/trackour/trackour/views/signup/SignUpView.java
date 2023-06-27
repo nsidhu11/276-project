@@ -23,7 +23,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
-@Route("signup")
+@Route("signup1")
 @PageTitle("SignUp")
 @AnonymousAllowed
 public class SignUpView extends VerticalLayout implements BeforeEnterObserver, BeforeLeaveObserver {

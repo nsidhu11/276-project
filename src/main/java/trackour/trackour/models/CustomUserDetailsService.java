@@ -1,11 +1,9 @@
 package trackour.trackour.models;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +15,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import lombok.Data;
+
+@Data
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository repository;
@@ -55,17 +56,15 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
     }
 
-    private static List<GrantedAuthority> getAuthorities(User user) {
-        return user.getRoles().stream().map(authority -> {
-            return new SimpleGrantedAuthority(authority.getName());
-        }).collect(Collectors.toList());
+    private static Collection<? extends GrantedAuthority> getAuthorities(User user) {
+        return user.getAuthorities();
     }
     
     /**
      * Prettyy print {@link User} object
      * @param user
      */
-    private void printUserObj(User user) {
+    public void printUserObj(User user) {
         ObjectMapper objMapper = new ObjectMapper();
         objMapper.enable(SerializationFeature.INDENT_OUTPUT); //pretty print
         String objStr;
@@ -95,13 +94,28 @@ public class CustomUserDetailsService implements UserDetailsService {
     public boolean registerUser(String username, String password) {
         User newUser = new User();
         newUser.setUsername(username);
-        // doSecurePassword(newUser, password);
         // unable to properly implement hashing technique atm so will either drop that or tryb again later
         String encodedPassword = passwordEncoder().encode(password);
         newUser.setPassword(encodedPassword);
         printUserObj(newUser);
+        return this.submitUser(newUser);
+    }
+
+    public boolean registerUser(User newUser) {
+        // unable to properly implement hashing technique atm so will either drop that or tryb again later
+        String encodedPassword = passwordEncoder().encode(newUser.getPassword());
+        newUser.setPassword(encodedPassword);
+        printUserObj(newUser);
+
+        // extra validation
+        // if displayName was submitted as empty, use the username string in place of it
+        newUser.setDisplayName(newUser.getUsername());
+        return this.submitUser(newUser);
+    }
+
+    private boolean submitUser(User newUser) {
         // if user doesn't already exist do new registration
-        Optional<User> existingUser = getByUsername(username);
+        Optional<User> existingUser = getByUsername(newUser.getUsername());
         if (!existingUser.isPresent()){
             update(newUser);
             return true;

@@ -11,7 +11,8 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import trackour.trackour.security.SecurityViewHandler;
-import trackour.trackour.views.signup.SignUpView;
+// import trackour.trackour.views.signup.SignUpView;
+import trackour.trackour.views.signup.SignupPageView;
 
 @Route("login")
 @PageTitle("Login")
@@ -37,7 +38,7 @@ public class LoginPage extends VerticalLayout implements BeforeLeaveObserver, Be
         login.setAction("login");
 
         // link to signup page
-        RouterLink signUpLink = new RouterLink("or Signup", SignUpView.class);
+        RouterLink signUpLink = new RouterLink("or Signup", SignupPageView.class);
 
         add(new H1("Trackour"), login, signUpLink);
     }
