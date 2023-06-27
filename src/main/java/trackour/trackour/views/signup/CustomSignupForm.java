@@ -16,11 +16,13 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.validator.EmailValidator;
+import com.vaadin.flow.router.RouterLink;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import trackour.trackour.models.CustomUserDetailsService;
 import trackour.trackour.models.User;
+import trackour.trackour.views.login.LoginPage;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
@@ -64,9 +66,12 @@ public class CustomSignupForm extends FormLayout {
         submitButtonElement = new Button("Sign up");
         submitButtonElement.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
+        // link to signup page
+        RouterLink loginLink = new RouterLink("or Login", LoginPage.class);
+
         add(title, usernameField, displayName, email, passwordField,
                 passwordConfirmField, errorMessageField,
-                submitButtonElement);
+                submitButtonElement, loginLink);
 
         Binder<User> binder = new Binder<>(User.class);
 
