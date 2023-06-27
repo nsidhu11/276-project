@@ -27,10 +27,10 @@ import lombok.Setter;
             columnNames={"uid", "username", "email"}
             )
         )
-public class User implements UserDetails {
+public class User {
 
     public User() {
-        this.initRoles();
+        this.initRole();
     }
 
     public User(String username, String displayName, String password, String email, Set<Role> roles) {
@@ -45,7 +45,7 @@ public class User implements UserDetails {
         this.displayName = displayName;
         this.password = password;
         this.email = email;
-        this.initRoles();
+        this.initRole();
     }
     
     @Id
@@ -83,37 +83,11 @@ public class User implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
-    private void initRoles() {
+    private void initRole() {
         // initialize default role as ["USER"]
         Set<Role> test = new HashSet<>();
         test.add(Role.USER);
+        test.add(Role.ADMIN);
         setRoles(test);
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.getRoles().stream().map(authority -> {
-            return new SimpleGrantedAuthority(authority.getName());
-        }).collect(Collectors.toList());
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 }

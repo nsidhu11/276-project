@@ -13,20 +13,23 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import trackour.trackour.models.CustomUserDetailsService;
 import trackour.trackour.security.SecurityService;
 import trackour.trackour.security.SecurityViewHandler;
 
 @Route("")
-@PermitAll
+// Admins are users but also have the "admin" special role so pages that can be viewed by
+// both users and admins should have the admin role specified as well
+@RolesAllowed({"ADMIN", "USER"})
 public class HomeView extends VerticalLayout {
     public HomeView(SecurityViewHandler securityViewHandler, SecurityService securityService, CustomUserDetailsService customUserDetailsService) {
         H1 header = new H1("Trackour");
         
         String sessionUsername = securityService.getAuthenticatedUser().getUsername();
         // since logged in, no need to verify if this optional is empty
-        // String displayNameString = customUserDetailsService.getByUsername(sessionUsername).get().getDisplayName();
-        Text displayNameTxt = new Text("@" + sessionUsername);
+        String displayNameString = customUserDetailsService.getByUsername(sessionUsername).get().getDisplayName();
+        Text displayNameTxt = new Text("@" + displayNameString);
         Button signUpButton = new Button("Sign Up");
         signUpButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         signUpButton.addClassName("button-hover-effect");

@@ -22,7 +22,7 @@ public class SecurityViewHandler {
     private final AuthenticationContext authContext;
 
     SecurityViewHandler (AuthenticationContext authContext) { this.authContext = authContext; }
-
+    
     /**
      * Call this method to set any view as only accessible by
      * anonymous or unauthenticated users only

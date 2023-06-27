@@ -20,13 +20,8 @@ public class SignupPageView extends VerticalLayout {
     CustomUserDetailsService userService;
    
     public SignupPageView(SecurityViewHandler securityViewHandler, CustomUserDetailsService userService) {
-        // BeanValidationBinder<UserDetails> binder = new BeanValidationBinder<>(UserDetails.class);
-        // boolean enablePasswordValidation = true;
+        
         CustomSignupForm signupForm = new CustomSignupForm(userService);
-
-        // final String validationAdditionalInfo = "Username must be >=3 characters & Password must be >=8 characters";
-        // final String signupErrorMessage = "Check that Username and Password are valid and that Username has not already been registered then try again.";
-        // hint at bottom of login form to clarify what's valid 
         
         // Center the signupForm
         setHorizontalComponentAlignment(Alignment.CENTER, signupForm);

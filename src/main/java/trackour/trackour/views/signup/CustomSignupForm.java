@@ -1,10 +1,10 @@
 package trackour.trackour.views.signup;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import com.vaadin.flow.component.HasValueAndElement;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -86,18 +86,19 @@ public class CustomSignupForm extends FormLayout {
                         // perform validation
                         // update the newUser object with data from the fields
                         binder.writeBean(newUser);
-                        if (binder.validate().isOk()) {
-                                System.out.println("Signup validations all passed!");
-                                // if no errors occured during validation, register/call userservice registration method
-                                // userService.registerUser(newUser);
-                                System.out.println("Registering user is:");
-                                userService.printUserObj(newUser);
-                        }
-                        else {
-                                System.out.println("Signup validations all NOT passed!");
-                        }
                 } catch (ValidationException e) {
                         System.out.println("Validation ERROR: Check that all validation rules are passed!");
+                        UI.getCurrent().navigate("signup?error");
+                        return;
+                }
+                if (binder.isValid()) {
+                        System.out.println("Signup validations all passed!");
+                        // if no errors occured during validation, register/call userservice registration method
+                        System.out.println("Registering user is:");
+                        userService.printUserObj(newUser);
+
+                        userService.registerUser(newUser);
+                        UI.getCurrent().navigate("redirect:/login");
                 }
         });
    }
@@ -114,6 +115,7 @@ private void doBindFormToValidationRules(Binder<User> binder) {
 
         // Start by defining the Field instance to use
         binder.forField(usernameField)
+        .asRequired("This field is required")
         // e.g., check if the password meets the required complexity rules
         .withValidator(value -> isValidUsername(value), "Username must be >=3 characters")
         .withValidator(value -> isUserNameUnique(value), "That Username already exists. Try again with a different Username")
@@ -121,17 +123,20 @@ private void doBindFormToValidationRules(Binder<User> binder) {
 
         // Shorthand for cases without extra configuration
         binder.forField(email)
+        .asRequired("This field is required")
         .withValidator(value -> isEmailValidByRegex(value),"Invalid email address")
         .withValidator(new EmailValidator("Invalid email address", false))
         .bind(User::getEmail,  User::setEmail);
 
         // Shorthand for cases without extra configuration
         binder.forField(passwordField)
+        .asRequired("This field is required")
         .withValidator(value -> isValidPassword(value), "Password must be >=8 characters ")
         .bind(User::getPassword,  User::setPassword);
 
         // handle confirmPassword
-        binder.forField(passwordField)
+        binder.forField(passwordConfirmField)
+        .asRequired("This field is required")
         .withValidator(value -> value.equals(passwordField.getValue()), "Passwords do not match.")
         .bind(User::getPassword,  User::setPassword);
 }
@@ -164,12 +169,14 @@ private boolean isUserNameUnique(String username) {
    }
 
    private boolean isValidUsername(String username) {
+        if (username.isEmpty()) return false;
         // Perform validation logic and return true or false based on the result
         // e.g., check if the username meets the required criteria
         return !username.isEmpty() && username.length() >= 3;
     }
 
     private boolean isValidPassword(String password) {
+        if (password.isEmpty()) return false;
         // Perform validation logic and return true or false based on the result
         // e.g., check if the password meets the required complexity rules
         return password.length() >= 8;

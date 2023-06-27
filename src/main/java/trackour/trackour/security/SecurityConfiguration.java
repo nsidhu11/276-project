@@ -1,7 +1,9 @@
 package trackour.trackour.security;
+import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.spring.security.VaadinWebSecurity;
 
 import trackour.trackour.models.CustomUserDetailsService;
+import trackour.trackour.models.Role;
 import trackour.trackour.views.login.LoginPage;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,11 +60,22 @@ public class SecurityConfiguration extends VaadinWebSecurity {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // http.authorizeHttpRequests(requests -> requests.requestMatchers("/xyz").permitAll());
+        // Can be used for rest api endpoints
+        // http.authorizeHttpRequests(requests -> requests.requestMatchers("/signup").permitAll());
+        // http.authorizeHttpRequests(requests -> requests.requestMatchers("/secret").hasAnyRole("ADMIN"));
+
+        // http
+        // .authorizeHttpRequests(auth -> 
+        // auth
+        // .requestMatchers("/*").hasAnyRole(Role.ADMIN.getName()));
         super.configure(http);
+
+        
         
         // Register your login view to the view access checker mechanism
         setLoginView(http, LoginPage.class,"/login");
+        // session fixatioon protection
+        // VaadinService.reinitializeSession(VaadinService.getCurrentRequest());
     }
     
 }

@@ -1,9 +1,13 @@
 package trackour.trackour.models;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,6 +26,16 @@ import lombok.Data;
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository repository;
 
+    /**
+     * public int doSomething (int ...a) {
+      int sum = 0;
+      for (int i : a)
+           sum += i;
+        return sum;
+    }
+     * @param user
+     * @return
+     */
     public CustomUserDetailsService(UserRepository repository) {
         this.repository = repository;
     }
@@ -57,7 +71,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     private static Collection<? extends GrantedAuthority> getAuthorities(User user) {
-        return user.getAuthorities();
+        System.out.println(user.getDisplayName() + " has roles:");
+        return user.getRoles().stream().map(authority -> {
+            System.out.println(authority.getName());
+            return new SimpleGrantedAuthority("ROLE_" + authority.getName());
+        }).collect(Collectors.toList());
     }
     
     /**
