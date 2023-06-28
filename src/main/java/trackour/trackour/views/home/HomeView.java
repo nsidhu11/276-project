@@ -1,5 +1,6 @@
-package trackour.trackour.views.main;
+package trackour.trackour.views.home;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -11,11 +12,24 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
-@Route("")
-public class HomeView extends VerticalLayout {
-    public HomeView() {
-        H1 header = new H1("Trackour");
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
+import trackour.trackour.models.CustomUserDetailsService;
+import trackour.trackour.security.SecurityService;
+import trackour.trackour.security.SecurityViewHandler;
 
+@Route("")
+// Admins are users but also have the "admin" special role so pages that can be viewed by
+// both users and admins should have the admin role specified as well
+@RolesAllowed({"ADMIN", "USER"})
+public class HomeView extends VerticalLayout {
+    public HomeView(SecurityViewHandler securityViewHandler, SecurityService securityService, CustomUserDetailsService customUserDetailsService) {
+        H1 header = new H1("Trackour");
+        
+        String sessionUsername = securityService.getAuthenticatedUser().getUsername();
+        // since logged in, no need to verify if this optional is empty
+        String displayNameString = customUserDetailsService.getByUsername(sessionUsername).get().getDisplayName();
+        Text displayNameTxt = new Text("@" + displayNameString);
         Button signUpButton = new Button("Sign Up");
         signUpButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         signUpButton.addClassName("button-hover-effect");
@@ -23,11 +37,11 @@ public class HomeView extends VerticalLayout {
             UI.getCurrent().navigate("signUp");
         });
 
-        Button LoginButton = new Button("Login");
+        Button LoginButton = new Button("Logout");
         LoginButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         LoginButton.addClassName("button-hover-effect");
         LoginButton.addClickListener(event -> {
-            UI.getCurrent().navigate("login");
+            securityViewHandler.logOut();
         });
 
         ComboBox<String> languageComboBox = new ComboBox<>();
@@ -37,7 +51,7 @@ public class HomeView extends VerticalLayout {
         TextField searchField = new TextField();
         searchField.setPlaceholder("Search Any Music");
 
-        HorizontalLayout topNavButtons = new HorizontalLayout(signUpButton, LoginButton);
+        HorizontalLayout topNavButtons = new HorizontalLayout(displayNameTxt, LoginButton);
         topNavButtons.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         topNavButtons.getStyle().set("gap", "10px"); // Add spacing between the buttons
 
