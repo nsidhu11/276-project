@@ -40,16 +40,16 @@ public class LoginPage extends VerticalLayout implements BeforeLeaveObserver, Be
         // submit action
         login.setAction("login");
 
-        Dialog resetPassDialog = handleForgotPasswordDialog();
+        // Dialog resetPassDialog = handleForgotPasswordDialog();
 
-        login.addForgotPasswordListener(ev -> {
-            resetPassDialog.open();
-        });
+        // login.addForgotPasswordListener(ev -> {
+        //     resetPassDialog.open();
+        // });
 
         // link to signup page
         RouterLink signUpLink = new RouterLink("or Signup", SignupPageView.class);
 
-        add(new H1("Trackour"), login, signUpLink, resetPassDialog);
+        add(new H1("Trackour"), login, signUpLink);
     }
 
     Dialog handleForgotPasswordDialog() {
