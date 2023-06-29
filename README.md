@@ -3,6 +3,9 @@
 This project can be used as a starting point to create your own Vaadin application with Spring Boot.
 It contains all the necessary configuration and some placeholder files to get you started.
 
+## To deploy to heroku, instructions at link here:
+https://www.youtube.com/watch?v=TqptUxWigiQ
+
 ## Running the application
 
 The project is a standard Maven project. To run it from the command line,
