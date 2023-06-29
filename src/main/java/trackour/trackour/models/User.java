@@ -12,14 +12,8 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
-@Data
-@Getter
-@Setter
 @Table(
     name="Users", 
     uniqueConstraints=
@@ -93,5 +87,67 @@ public class User {
         defaultRole.add(Role.USER);
         // test.add(Role.ADMIN);
         setRoles(defaultRole);
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Set<Role> getRoles() {
+        return this.roles;
+    }
+    
+
+    public void setUid(Long uid) {
+        this.uid = uid;
+    }
+
+    public Long getUid() {
+        return this.uid;
+    }
+    
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+    
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+        return this.displayName;
+    }
+    
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+    
+
+    public void setPasswordResetToken(String passwordResetToken) {
+        this.passwordResetToken = passwordResetToken;
+    }
+
+    public String getPasswordResetToken() {
+        return this.passwordResetToken;
+    }
+    
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return this.email;
     }
 }
