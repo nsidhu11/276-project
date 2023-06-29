@@ -19,24 +19,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import lombok.Data;
-
-@Data
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository repository;
-
-    /**
-     * public int doSomething (int ...a) {
-      int sum = 0;
-      for (int i : a)
-           sum += i;
-        return sum;
-    }
-     * @param user
-     * @return
-     */
-    public CustomUserDetailsService(UserRepository repository) {
+        public CustomUserDetailsService(UserRepository repository) {
         this.repository = repository;
     }
 

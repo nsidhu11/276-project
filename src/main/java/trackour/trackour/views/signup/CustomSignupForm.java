@@ -18,14 +18,10 @@ import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.router.RouterLink;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import trackour.trackour.models.CustomUserDetailsService;
 import trackour.trackour.models.User;
 import trackour.trackour.views.login.LoginPage;
 
-@Data
-@EqualsAndHashCode(callSuper=false)
 public class CustomSignupForm extends FormLayout {
         
         private final String emailValidationRegex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@" 
