@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 
 // import jakarta.servlet.http.HttpServletResponse;
 
-@Controller
+// @Controller
 public class UserController {
     
     // @Autowired
