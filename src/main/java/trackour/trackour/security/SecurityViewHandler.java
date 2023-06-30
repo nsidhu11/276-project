@@ -2,6 +2,7 @@ package trackour.trackour.security;
 
 import java.util.Optional;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,8 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.flow.spring.security.AuthenticationContext;
+
+import trackour.trackour.models.Role;
 
 /**
  * This class includes "View-manipulation" methods
@@ -25,15 +28,26 @@ public class SecurityViewHandler {
     
     /**
      * Call this method to set any view as only accessible by
-     * anonymous or unauthenticated users only
+     * anonymous or unauthenticated users and admins only
      * 
      */
-    public void handleAnonymousOnly(BeforeEnterEvent beforEnterEvent, Boolean isAnonymousOnly, String rerouteTo){
-        if (isAnonymousOnly && getRequestSession().isPresent()) {
-            // this view should be only accessible to Anonymous users. Reroute if user is authenticated
-            beforEnterEvent.rerouteTo(rerouteTo);
+    public void handleAnonymousOnly(BeforeEnterEvent beforEnterEvent, Boolean excludeFromPage){
+        // only anonymous user sessions and admins are allowed
+        boolean isAuthenticatedUser = getRequestSession().isPresent();
+        Optional<UserDetails> userSession = getRequestSession();
+        boolean isUserAdmin = false;
+        
+        if (userSession.isPresent()){
+            isUserAdmin = userSession.get().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_" + Role.ADMIN.getName()));
         }
-        return;
+        System.out.println("isUserAdmin: " + isUserAdmin);
+
+        if (isAuthenticatedUser){
+            // allow this page to bypass the redirection protocol
+            if (excludeFromPage && isUserAdmin) return;
+            beforEnterEvent.rerouteTo("error");
+            return;
+        }
     }
 
     public void logOut(){
