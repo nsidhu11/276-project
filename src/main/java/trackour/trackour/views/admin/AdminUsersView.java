@@ -146,6 +146,12 @@ public class AdminUsersView extends VerticalLayout {
         Button delButton = new Button(delBtnIcon, (ev) -> {
             // delete that user record
             this.customUserDetailsService.delete(userRecord.getUid());
+            boolean isAdminDeletingThemself = securityService.getAuthenticatedUser().getUsername().equals(userRecord.getUsername());
+            if (isAdminDeletingThemself) {
+                securityViewHandler.logOut();
+                this.getUI().get().getPage().setLocation("");
+                return;
+            }
             // this.getUI().get().getPage().setLocation("admin/view-users");
             this.getUI().get().getPage().reload();
         });
