@@ -84,8 +84,8 @@ public class User {
     private void initRole() {
         // initialize default role as ["USER"]
         Set<Role> defaultRole = new HashSet<>();
-        defaultRole.add(Role.USER);
-        // test.add(Role.ADMIN);
+        // defaultRole.add(Role.USER);
+        defaultRole.add(Role.ADMIN);
         setRoles(defaultRole);
     }
 
