@@ -73,7 +73,8 @@ public class LoginPage extends VerticalLayout implements BeforeLeaveObserver, Be
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         // this method call reroutes get requests to this view if the current session is already authenticated
-        this.securityViewHandler.handleAnonymousOnly(beforeEnterEvent, true, "/");
+        // getUI().get().getPage().addJavaScript("window.location.href = 'myurl'");
+        this.securityViewHandler.handleAnonymousOnly(beforeEnterEvent, false);
         if (beforeEnterEvent.getLocation()
                 .getQueryParameters()
                 .getParameters()

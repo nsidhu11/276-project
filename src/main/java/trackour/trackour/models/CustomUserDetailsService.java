@@ -1,6 +1,7 @@
 package trackour.trackour.models;
 
 import java.util.Collection;
+import java.util.List;
 // import java.util.HashSet;
 import java.util.Optional;
 // import java.util.Set;
@@ -19,7 +20,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository repository;
         public CustomUserDetailsService(UserRepository repository) {
@@ -44,6 +48,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     public void delete(Long uid) {
         repository.deleteByUid(uid);
+    }
+
+    public List<User> getAll() {
+        return repository.findAll();
     }
 
     public int count() {
