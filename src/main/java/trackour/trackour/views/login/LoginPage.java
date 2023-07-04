@@ -1,10 +1,11 @@
 package trackour.trackour.views.login;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.UI;
+//import com.vaadin.flow.component.button.Button;
+//import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.EmailField;
+//import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.BeforeLeaveEvent;
@@ -40,11 +41,9 @@ public class LoginPage extends VerticalLayout implements BeforeLeaveObserver, Be
         // submit action
         login.setAction("login");
 
-        // Dialog resetPassDialog = handleForgotPasswordDialog();
-
-        // login.addForgotPasswordListener(ev -> {
-        //     resetPassDialog.open();
-        // });
+        login.addForgotPasswordListener(ev -> {
+            UI.getCurrent().navigate("resetPassword");
+        });
 
         // link to signup page
         RouterLink signUpLink = new RouterLink("or Signup", SignupPageView.class);
@@ -52,6 +51,7 @@ public class LoginPage extends VerticalLayout implements BeforeLeaveObserver, Be
         add(new H1("Trackour"), login, signUpLink);
     }
 
+    /*
     Dialog handleForgotPasswordDialog() {
         Dialog dialog = new Dialog();
 
@@ -60,8 +60,12 @@ public class LoginPage extends VerticalLayout implements BeforeLeaveObserver, Be
         EmailField dialogEmailField = new EmailField("Email");
 
         dialog.setHeaderTitle("Forgot Password");
-        Button saveButton = new Button("Send", e -> dialog.close());
+        Button saveButton = new Button("Send");
         Button cancelButton = new Button("Cancel", e -> dialog.close());
+
+        saveButton.addClickListener(clickEvent -> {
+            System.out.println(dialogEmailField.getValue());
+        });
 
         resetDialogLayout.add(dialogEmailField);
         dialog.add(resetDialogLayout);
@@ -69,6 +73,7 @@ public class LoginPage extends VerticalLayout implements BeforeLeaveObserver, Be
         dialog.getFooter().add(saveButton);
         return dialog;
     }
+    */
 
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {

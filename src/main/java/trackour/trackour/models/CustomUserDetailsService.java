@@ -42,6 +42,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         return repository.findByEmail(email);
     }
 
+    public Optional<User> getByPasswordResetToken(String passwordResetToken) {
+        return repository.findByPasswordResetToken(passwordResetToken);
+    }
+
     public User update(User entity) {
         return repository.saveAndFlush(entity);
     }
@@ -137,5 +141,20 @@ public class CustomUserDetailsService implements UserDetailsService {
             return true;
         }   
         return false;
+    }
+
+    public boolean updatePassword(User oldUser) {
+        Optional<User> existingUser = getByUsername(oldUser.getUsername());
+        if(!existingUser.isPresent()){
+            return false;
+        }
+
+        String encodedPassword = passwordEncoder().encode(oldUser.getPassword());
+        oldUser.setPassword(encodedPassword);
+        printUserObj(oldUser);
+
+        update(oldUser);
+
+        return true;
     }
 }

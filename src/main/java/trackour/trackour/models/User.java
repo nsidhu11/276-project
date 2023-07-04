@@ -4,6 +4,7 @@ package trackour.trackour.models;
 import java.util.HashSet;
 import java.util.Set;
 // import java.util.stream.Collectors;
+import java.util.UUID;
 
 // import org.springframework.security.core.GrantedAuthority;
 // import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -136,6 +137,10 @@ public class User {
 
     public void setPasswordResetToken(String passwordResetToken) {
         this.passwordResetToken = passwordResetToken;
+    }
+
+    public void generatePasswordResetToken() {
+        this.passwordResetToken = UUID.randomUUID().toString();
     }
 
     public String getPasswordResetToken() {
