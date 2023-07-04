@@ -1,5 +1,9 @@
 package trackour.trackour.views.forgotPassword;
 
+import java.net.URL;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -17,10 +21,8 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
-import trackour.trackour.models.CustomUserDetailsService;
-//import trackour.trackour.models.PasswordToken;
-//import trackour.trackour.models.PasswordTokenService;
-import trackour.trackour.models.User;
+import trackour.trackour.model.CustomUserDetailsService;
+import trackour.trackour.model.User;
 import trackour.trackour.security.SecurityService;
 import trackour.trackour.security.SecurityViewHandler;
 import trackour.trackour.views.login.LoginPage;
@@ -30,14 +32,35 @@ import trackour.trackour.views.login.LoginPage;
 @AnonymousAllowed
 public class enterEmailView extends VerticalLayout implements BeforeLeaveObserver, BeforeEnterObserver {
 
+    @Autowired
     SecurityViewHandler securityViewHandler;
+    @Autowired
     CustomUserDetailsService customUserDetailsService;
+    @Autowired
+    SecurityService securityService;
     //PasswordTokenService passwordTokenService;
 
-    public enterEmailView(SecurityViewHandler securityViewHandler, SecurityService securityService, CustomUserDetailsService customUserDetailsService) {
+    private String mailHost;
+    private Integer mailPort;
+    private String mailUsername;
+    private String mailPassword;
+
+    public enterEmailView(
+        SecurityViewHandler securityViewHandler, 
+        SecurityService securityService, 
+        CustomUserDetailsService customUserDetailsService,
+        @Value("${mail.smtp.host}") String mailHost,
+        @Value("${mail.smtp.port}") Integer mailPort,
+        @Value("${mail.smtp.username}") String mailUsername,
+        @Value("${mail.smtp.password}") String mailPassword) {
 
         this.securityViewHandler = securityViewHandler;
         this.customUserDetailsService = customUserDetailsService;
+
+        this.mailHost = mailHost;
+        this.mailPort = mailPort;
+        this.mailUsername = mailUsername;
+        this.mailPassword = mailPassword;
         //this.passwordTokenService = passwordTokenService;
 
         H3 title = new H3("Enter your email");
@@ -71,6 +94,7 @@ public class enterEmailView extends VerticalLayout implements BeforeLeaveObserve
     }
 
     public void getEmail(String email, Span error) {
+
         User user;
 
         System.out.println("Searching for user...");
@@ -79,10 +103,21 @@ public class enterEmailView extends VerticalLayout implements BeforeLeaveObserve
             user = customUserDetailsService.getByEmail(email).get();
             System.out.println("User found: " + user.getUsername());
             error.setText("The password reset email has been sent!");
+            // update user record with new password token
 
-            user.generatePasswordResetToken();
-            System.out.println("Password token: " + user.getPasswordResetToken());
-            customUserDetailsService.update(user);
+            // send the email
+            
+            // async method to send email w link
+            getUI().get().getPage().fetchCurrentURL(currentUrl -> {
+                // create a new token whenever a reset request is sent to invalidate any old token that may have not been used
+                // this is to avoid stolen tokens from remaining valid
+                user.generatePasswordResetToken();
+                String token = user.getPasswordResetToken();
+                System.out.println("Password token: " + token);
+                System.out.println("currentUrl: " + currentUrl);
+                customUserDetailsService.update(user);
+                sendResetLink(currentUrl, token, email);
+            });
 
             //PasswordToken token = new PasswordToken();
             //passwordTokenService.newToken(token);
@@ -91,6 +126,22 @@ public class enterEmailView extends VerticalLayout implements BeforeLeaveObserve
             System.out.println("Could not find user");
             error.setText("Email not found! Please try a different email.");
         }
+    }
+
+    void sendResetLink(URL currentUrl, String token, String recipientEmail) {
+        String resetLink = currentUrl.toString() + "/" + token;
+        System.out.println("link: " + resetLink);
+        ResetLinkHandler resetLinkHandler = new ResetLinkHandler(
+            this.mailHost,
+            this.mailPort,
+            this.mailUsername,
+            this.mailPassword,
+            recipientEmail,
+            resetLink
+        );
+
+        resetLinkHandler.sendEmail();
+        // this.mailHost
     }
 
     @Override

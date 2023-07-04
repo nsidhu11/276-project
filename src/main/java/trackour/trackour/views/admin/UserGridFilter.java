@@ -3,8 +3,8 @@ import java.util.Set;
 
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 
-import trackour.trackour.models.Role;
-import trackour.trackour.models.User;
+import trackour.trackour.model.Role;
+import trackour.trackour.model.User;
 
 class UserGridFilter {
     private final GridListDataView<User> dataView;

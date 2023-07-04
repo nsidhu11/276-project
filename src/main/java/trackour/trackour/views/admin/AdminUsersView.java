@@ -30,8 +30,8 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 
 import jakarta.annotation.security.RolesAllowed;
-import trackour.trackour.models.CustomUserDetailsService;
-import trackour.trackour.models.User;
+import trackour.trackour.model.CustomUserDetailsService;
+import trackour.trackour.model.User;
 import trackour.trackour.security.SecurityService;
 import trackour.trackour.security.SecurityViewHandler;
 

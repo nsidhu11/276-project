@@ -9,7 +9,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
-import trackour.trackour.models.CustomUserDetailsService;
+import trackour.trackour.model.CustomUserDetailsService;
 import trackour.trackour.security.SecurityViewHandler;
 
 @Route("signup")

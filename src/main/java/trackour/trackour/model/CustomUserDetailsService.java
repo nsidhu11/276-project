@@ -1,4 +1,4 @@
-package trackour.trackour.models;
+package trackour.trackour.model;
 
 import java.util.Collection;
 import java.util.List;
@@ -92,7 +92,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             objStr = objMapper.writeValueAsString(user);
             System.out.println(objStr);
         } catch (JsonProcessingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -102,7 +101,7 @@ public class CustomUserDetailsService implements UserDetailsService {
      * To just get an instance of the encoder, call {@code passwordEncoder()}
      * @return {@link BCryptPasswordEncoder} encrypted String
      */
-    public PasswordEncoder passwordEncoder(){
+    public static PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
@@ -152,6 +151,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         String encodedPassword = passwordEncoder().encode(oldUser.getPassword());
         oldUser.setPassword(encodedPassword);
         printUserObj(oldUser);
+
+        // invalidate the used token with an empty string
+        oldUser.setPasswordResetToken("");
 
         update(oldUser);
 
