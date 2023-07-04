@@ -69,31 +69,16 @@ public class ResetPasswordView extends VerticalLayout implements BeforeLeaveObse
             this.user = userService.getByPasswordResetToken(parameter).get();
 
             this.resetPasswordForm = new ResetPasswordForm(userService, user);
-
-            //System.out.println(token);
         
             // Center the form
             setAlignItems(FlexComponent.Alignment.CENTER);
 
             add(resetPasswordForm);
-            
-
-            //System.out.println("Found user " + user.getUsername());
         }
     }
 
     public ResetPasswordView(SecurityViewHandler securityViewHandler, CustomUserDetailsService userService) {
         this.userService = userService;
-        /*
-        this.resetPasswordForm = new ResetPasswordForm(userService, user);
-
-        System.out.println(token);
-        
-        // Center the form
-        setAlignItems(FlexComponent.Alignment.CENTER);
-
-        add(resetPasswordForm);
-        */
     }
     
 }

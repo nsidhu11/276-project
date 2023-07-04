@@ -59,8 +59,6 @@ public class ResetPasswordForm extends VerticalLayout {
 
         binder.readBean(user);
 
-        System.out.println("Binding user " + user.getUsername());
-
         doBindFormToValidationRules(binder);
 
         submit.addClickListener(ev -> {
@@ -72,13 +70,12 @@ public class ResetPasswordForm extends VerticalLayout {
                         binder.writeBean(user);
                 } catch (ValidationException e) {
                         System.out.println("Validation ERROR: Check that all validation rules are passed!");
-                        UI.getCurrent().navigate("signup?error");
                         return;
                 }
                 if (binder.isValid()) {
-                        System.out.println("Signup validations all passed!");
+                        System.out.println("Validations all passed!");
                         // if no errors occured during validation, register/call userservice registration method
-                        System.out.println("Registering user is:");
+                        System.out.println("Updating user is:");
                         user.setPasswordResetToken(null);
                         userService.updatePassword(user);
                         UI.getCurrent().navigate("redirect:/login");
