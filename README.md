@@ -44,9 +44,11 @@ heroku deploy:jar target\trackour-1.0-SNAPSHOT.jar --app herokuappname
   [App Layout](https://vaadin.com/docs/components/app-layout).
 - `views` package in `src/main/java` contains the server-side Java views of your application.
 - `views` folder in `frontend/` contains the client-side JavaScript views of your application.
+- `security` folder in `src/main/java/` contains the Spring Security logic for authentication and authorization.
+- `models` folder in `src/main/java/` contains the entities and their respective services.
 - `themes` folder in `frontend/` contains the custom CSS styles.
 
-## Useful links
+## Useful links from Vaadin
 
 - Read the documentation at [vaadin.com/docs](https://vaadin.com/docs).
 - Follow the tutorial at [vaadin.com/docs/latest/tutorial/overview](https://vaadin.com/docs/latest/tutorial/overview).
