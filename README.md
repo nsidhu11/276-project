@@ -44,18 +44,27 @@ Once the JAR file is built, you can run it using
 - Ask questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/vaadin) or join our [Discord channel](https://discord.gg/MYFq5RTbBn).
 - Report issues, create pull requests in [GitHub](https://github.com/vaadin).
 
+## Deploy using Heroku
 
-## Deploying using Docker
+login to Heroku with
 
-To build the Dockerized version of the project, run
+```
+heroku login
+```
+
+you can create a new Heroku app simply with
+
+```
+heroku create herokuappname
+```
+
+To build the jar file, run
 
 ```
 mvn clean package -Pproduction
-docker build . -t trackour:latest
 ```
 
-Once the Docker image is correctly built, you can test it locally using
-
+Once it's built, deploy the jar to Heroku with
 ```
-docker run -p 8080:8080 trackour:latest
+heroku deploy:jar target\trackour-1.0-SNAPSHOT.jar --app herokuappname
 ```
