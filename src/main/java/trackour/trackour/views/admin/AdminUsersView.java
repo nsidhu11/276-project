@@ -32,38 +32,40 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import trackour.trackour.models.CustomUserDetailsService;
 import trackour.trackour.models.User;
-import trackour.trackour.security.SecurityService;
+// import trackour.trackour.security.SecurityService;
 import trackour.trackour.security.SecurityViewHandler;
 
 @Route("admin/view-users")
-// Admins are users but also have the "admin" special role so pages that can be viewed by
+// Admins are users but also have the "admin" special role so pages that can be
+// viewed by
 // both users and admins should have the admin role specified as well
-@RolesAllowed({"ADMIN"})
+@RolesAllowed({ "ADMIN" })
 public class AdminUsersView extends VerticalLayout {
 
     @Autowired
     SecurityViewHandler securityViewHandler;
 
-    @Autowired
-    SecurityService securityService;
-    
+    // @Autowired
+    // SecurityService securityService;
+
     @Autowired
     CustomUserDetailsService customUserDetailsService;
-    
-    public AdminUsersView(SecurityViewHandler securityViewHandler, SecurityService securityService, CustomUserDetailsService customUserDetailsService) {
+
+    public AdminUsersView(SecurityViewHandler securityViewHandler, CustomUserDetailsService customUserDetailsService) {
         this.securityViewHandler = securityViewHandler;
-        this.securityService = securityService;
+        // this.securityService = securityService;
         this.customUserDetailsService = customUserDetailsService;
 
-        this.setHeightFull();       
+        this.setHeightFull();
 
         add(doDesignNavBar(), doDesignGrid());
     }
 
     private HorizontalLayout doDesignNavBar() {
         H1 header = new H1("Trackour");
-        
-        String sessionUsername = securityService.getAuthenticatedUser().getUsername();
+
+        String sessionUsername = securityViewHandler.getRequestSession().get().getUsername();
+        // securityService.getAuthenticatedUser().getUsername();
         // since logged in, no need to verify if this optional is empty
         String displayNameString = customUserDetailsService.getByUsername(sessionUsername).get().getDisplayName();
         Text displayNameTxt = new Text("@" + displayNameString);
@@ -101,11 +103,12 @@ public class AdminUsersView extends VerticalLayout {
         return topNavBar;
     }
 
-    private  Grid<User> doDesignGrid() {
+    private Grid<User> doDesignGrid() {
         Grid<User> grid1 = new Grid<>(User.class, false);
         grid1.setColumnRendering(ColumnRendering.LAZY);
         Grid.Column<User> uidColumn = grid1.addColumn(User::getUid).setHeader("Uid").setSortable(true);
-        Grid.Column<User> displayNameColumn = grid1.addColumn(User::getDisplayName).setHeader("Display Name").setSortable(true);
+        Grid.Column<User> displayNameColumn = grid1.addColumn(User::getDisplayName).setHeader("Display Name")
+                .setSortable(true);
         Grid.Column<User> usernameColumn = grid1.addColumn(User::getUsername).setHeader("Username").setSortable(true);
         Grid.Column<User> emailColumn = grid1.addColumn(User::getEmail).setHeader("Email").setSortable(true);
 
@@ -141,12 +144,14 @@ public class AdminUsersView extends VerticalLayout {
     }
 
     // Button deleteUserButton(Grid<User> grid1, Column<User> uidColumn){
-    Button deleteUserButton(User userRecord, GridListDataView<User> dataView){
+    Button deleteUserButton(User userRecord, GridListDataView<User> dataView) {
         Icon delBtnIcon = new Icon(VaadinIcon.TRASH);
         Button delButton = new Button(delBtnIcon, (ev) -> {
             // delete that user record
             this.customUserDetailsService.delete(userRecord.getUid());
-            boolean isAdminDeletingThemself = securityService.getAuthenticatedUser().getUsername().equals(userRecord.getUsername());
+            boolean isAdminDeletingThemself = securityViewHandler.getRequestSession().get().getUsername()
+                    .equals(userRecord.getUsername());
+
             if (isAdminDeletingThemself) {
                 securityViewHandler.logOut();
                 this.getUI().get().getPage().setLocation("");
@@ -159,7 +164,7 @@ public class AdminUsersView extends VerticalLayout {
     }
 
     private static Component createFilterHeader(String labelText,
-        Consumer<String> filterChangeStringConsumer) {
+            Consumer<String> filterChangeStringConsumer) {
         Text label = new Text(labelText);
         TextField textField = new TextField();
         textField.setValueChangeMode(ValueChangeMode.EAGER);

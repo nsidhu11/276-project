@@ -21,7 +21,7 @@ import trackour.trackour.models.CustomUserDetailsService;
 //import trackour.trackour.models.PasswordToken;
 //import trackour.trackour.models.PasswordTokenService;
 import trackour.trackour.models.User;
-import trackour.trackour.security.SecurityService;
+// import trackour.trackour.security.SecurityService;
 import trackour.trackour.security.SecurityViewHandler;
 import trackour.trackour.views.login.LoginPage;
 
@@ -32,20 +32,22 @@ public class enterEmailView extends VerticalLayout implements BeforeLeaveObserve
 
     SecurityViewHandler securityViewHandler;
     CustomUserDetailsService customUserDetailsService;
-    //PasswordTokenService passwordTokenService;
+    // PasswordTokenService passwordTokenService;
 
-    public enterEmailView(SecurityViewHandler securityViewHandler, SecurityService securityService, CustomUserDetailsService customUserDetailsService) {
+    public enterEmailView(SecurityViewHandler securityViewHandler,
+            CustomUserDetailsService customUserDetailsService) {
 
         this.securityViewHandler = securityViewHandler;
         this.customUserDetailsService = customUserDetailsService;
-        //this.passwordTokenService = passwordTokenService;
+        // this.passwordTokenService = passwordTokenService;
 
         H3 title = new H3("Enter your email");
 
-        Span text = new Span("An email with a link to reset your password will be sent shortly. Remember to check your spam folder!");
+        Span text = new Span(
+                "An email with a link to reset your password will be sent shortly. Remember to check your spam folder!");
 
         EmailField emailField = new EmailField("Email");
-        
+
         Span error = new Span("");
 
         Button submit = new Button("Submit", e -> getEmail(emailField.getValue(), error));
@@ -62,8 +64,8 @@ public class enterEmailView extends VerticalLayout implements BeforeLeaveObserve
 
         FormLayout form = new FormLayout();
         form.add(emailField, submit);
-        form.setColspan(emailField,1);
-        form.setColspan(submit,1);
+        form.setColspan(emailField, 1);
+        form.setColspan(submit, 1);
 
         layout.add(title, text, form, error, loginLink);
 
@@ -84,8 +86,8 @@ public class enterEmailView extends VerticalLayout implements BeforeLeaveObserve
             System.out.println("Password token: " + user.getPasswordResetToken());
             customUserDetailsService.update(user);
 
-            //PasswordToken token = new PasswordToken();
-            //passwordTokenService.newToken(token);
+            // PasswordToken token = new PasswordToken();
+            // passwordTokenService.newToken(token);
 
         } else {
             System.out.println("Could not find user");
@@ -95,7 +97,8 @@ public class enterEmailView extends VerticalLayout implements BeforeLeaveObserve
 
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        // this method call reroutes get requests to this view if the current session is already authenticated
+        // this method call reroutes get requests to this view if the current session is
+        // already authenticated
         this.securityViewHandler.handleAnonymousOnly(beforeEnterEvent, true);
         if (beforeEnterEvent.getLocation()
                 .getQueryParameters()
@@ -107,9 +110,9 @@ public class enterEmailView extends VerticalLayout implements BeforeLeaveObserve
     @Override
     public void beforeLeave(BeforeLeaveEvent event) {
         // reroute to error page
-        if (event.hasUnknownReroute()){
+        if (event.hasUnknownReroute()) {
             System.out.println("Rerouting to Error Page!");
         }
     }
-    
+
 }

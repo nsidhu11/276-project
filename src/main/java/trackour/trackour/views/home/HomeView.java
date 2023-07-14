@@ -1,5 +1,9 @@
 package trackour.trackour.views.home;
 
+import java.util.Optional;
+
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
@@ -21,7 +25,6 @@ import com.vaadin.flow.router.Route;
 
 import jakarta.annotation.security.RolesAllowed;
 import trackour.trackour.models.CustomUserDetailsService;
-import trackour.trackour.security.SecurityService;
 import trackour.trackour.security.SecurityViewHandler;
 
 @Route("")
@@ -33,11 +36,14 @@ public class HomeView extends VerticalLayout {
     MenuBar mobileVMenuBar;
     Component mobileView;
 
-    public HomeView(SecurityViewHandler securityViewHandler, SecurityService securityService,
+    public HomeView(SecurityViewHandler securityViewHandler,
             CustomUserDetailsService customUserDetailsService) {
         H1 header = new H1("Trackour");
 
-        String sessionUsername = securityService.getAuthenticatedUser().getUsername();
+        Optional<UserDetails> username = securityViewHandler.getRequestSession();
+        String sessionUsername = username.get().getUsername();
+        // String sessionUsername =
+        // securityService.getAuthenticatedUser().getUsername();
         // since logged in, no need to verify if this optional is empty
         String displayNameString = customUserDetailsService.getByUsername(sessionUsername).get().getDisplayName();
         Text displayNameTxt = new Text("@" + displayNameString);
