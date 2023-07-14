@@ -1,6 +1,7 @@
 package trackour.trackour.models;
 
 import java.util.Collection;
+import java.util.List;
 // import java.util.HashSet;
 import java.util.Optional;
 // import java.util.Set;
@@ -19,7 +20,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository repository;
         public CustomUserDetailsService(UserRepository repository) {
@@ -38,12 +42,20 @@ public class CustomUserDetailsService implements UserDetailsService {
         return repository.findByEmail(email);
     }
 
+    public Optional<User> getByPasswordResetToken(String passwordResetToken) {
+        return repository.findByPasswordResetToken(passwordResetToken);
+    }
+
     public User update(User entity) {
         return repository.saveAndFlush(entity);
     }
 
     public void delete(Long uid) {
         repository.deleteByUid(uid);
+    }
+
+    public List<User> getAll() {
+        return repository.findAll();
     }
 
     public int count() {
@@ -129,5 +141,20 @@ public class CustomUserDetailsService implements UserDetailsService {
             return true;
         }   
         return false;
+    }
+
+    public boolean updatePassword(User oldUser) {
+        Optional<User> existingUser = getByUsername(oldUser.getUsername());
+        if(!existingUser.isPresent()){
+            return false;
+        }
+
+        String encodedPassword = passwordEncoder().encode(oldUser.getPassword());
+        oldUser.setPassword(encodedPassword);
+        printUserObj(oldUser);
+
+        update(oldUser);
+
+        return true;
     }
 }
