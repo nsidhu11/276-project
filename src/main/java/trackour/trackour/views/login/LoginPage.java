@@ -18,6 +18,9 @@ import trackour.trackour.security.SecurityViewHandler;
 // import trackour.trackour.views.signup.SignUpView;
 import trackour.trackour.views.signup.SignupPageView;
 
+// TESTING
+import trackour.trackour.views.api.testPage;
+
 @Route("login")
 @PageTitle("Login")
 @AnonymousAllowed
@@ -48,7 +51,11 @@ public class LoginPage extends VerticalLayout implements BeforeLeaveObserver, Be
         // link to signup page
         RouterLink signUpLink = new RouterLink("or Signup", SignupPageView.class);
 
-        add(new H1("Trackour"), login, signUpLink);
+        //TESTING
+        RouterLink testingLink = new RouterLink("TESTING", testPage.class);
+
+        // REMOVE TESTING
+        add(new H1("Trackour"), login, signUpLink, testingLink);
     }
 
     /*
