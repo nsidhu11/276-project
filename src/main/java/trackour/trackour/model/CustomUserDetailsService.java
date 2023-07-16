@@ -30,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.repository = repository;
     }
 
-    public Optional<User> get(Long uid) {
+    public Optional<User> getByUid(Long uid) {
         return repository.findByUid(uid);
     }
 
@@ -75,8 +75,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     private static Collection<? extends GrantedAuthority> getAuthorities(User user) {
         System.out.println(user.getDisplayName() + " has roles:");
         return user.getRoles().stream().map(authority -> {
-            System.out.println(authority.getName());
-            return new SimpleGrantedAuthority("ROLE_" + authority.getName());
+            System.out.println(authority.roleToString());
+            return new SimpleGrantedAuthority(authority.roleToRoleString());
         }).collect(Collectors.toList());
     }
     

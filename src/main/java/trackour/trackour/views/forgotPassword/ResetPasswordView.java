@@ -16,7 +16,7 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 import trackour.trackour.model.CustomUserDetailsService;
 import trackour.trackour.model.User;
-import trackour.trackour.security.SecurityViewHandler;
+import trackour.trackour.security.SecurityViewService;
 
 @Route(value = "resetPassword")
 @PageTitle("Set New Password")
@@ -24,7 +24,7 @@ import trackour.trackour.security.SecurityViewHandler;
 public class ResetPasswordView extends VerticalLayout implements BeforeLeaveObserver, BeforeEnterObserver, HasUrlParameter<String> {
 
     @Autowired
-    SecurityViewHandler securityViewHandler;
+    SecurityViewService securityViewHandler;
 
     @Autowired
     CustomUserDetailsService userService;
@@ -77,7 +77,7 @@ public class ResetPasswordView extends VerticalLayout implements BeforeLeaveObse
     }
 
     public ResetPasswordView(
-        SecurityViewHandler securityViewHandler,
+        SecurityViewService securityViewHandler,
         CustomUserDetailsService userService) {
         this.userService = userService;
         this.securityViewHandler = securityViewHandler;

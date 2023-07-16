@@ -23,8 +23,7 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 import trackour.trackour.model.CustomUserDetailsService;
 import trackour.trackour.model.User;
-import trackour.trackour.security.SecurityService;
-import trackour.trackour.security.SecurityViewHandler;
+import trackour.trackour.security.SecurityViewService;
 import trackour.trackour.views.login.LoginPage;
 
 @Route("resetPassword")
@@ -33,11 +32,9 @@ import trackour.trackour.views.login.LoginPage;
 public class enterEmailView extends VerticalLayout implements BeforeLeaveObserver, BeforeEnterObserver {
 
     @Autowired
-    SecurityViewHandler securityViewHandler;
+    SecurityViewService securityService;
     @Autowired
     CustomUserDetailsService customUserDetailsService;
-    @Autowired
-    SecurityService securityService;
     //PasswordTokenService passwordTokenService;
 
     private String mailHost;
@@ -46,15 +43,14 @@ public class enterEmailView extends VerticalLayout implements BeforeLeaveObserve
     private String mailPassword;
 
     public enterEmailView(
-        SecurityViewHandler securityViewHandler, 
-        SecurityService securityService, 
+        SecurityViewService securityService,
         CustomUserDetailsService customUserDetailsService,
         @Value("${mail.smtp.host}") String mailHost,
         @Value("${mail.smtp.port}") Integer mailPort,
         @Value("${mail.smtp.username}") String mailUsername,
         @Value("${mail.smtp.password}") String mailPassword) {
 
-        this.securityViewHandler = securityViewHandler;
+        this.securityService = securityService;
         this.customUserDetailsService = customUserDetailsService;
 
         this.mailHost = mailHost;
@@ -147,7 +143,7 @@ public class enterEmailView extends VerticalLayout implements BeforeLeaveObserve
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         // this method call reroutes get requests to this view if the current session is already authenticated
-        this.securityViewHandler.handleAnonymousOnly(beforeEnterEvent, true);
+        this.securityService.handleAnonymousOnly(beforeEnterEvent, true);
         if (beforeEnterEvent.getLocation()
                 .getQueryParameters()
                 .getParameters()

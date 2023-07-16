@@ -10,7 +10,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 import trackour.trackour.model.CustomUserDetailsService;
-import trackour.trackour.security.SecurityViewHandler;
+import trackour.trackour.security.SecurityViewService;
 
 @Route("signup")
 @PageTitle("SignUp")
@@ -18,14 +18,14 @@ import trackour.trackour.security.SecurityViewHandler;
 public class SignupPageView extends VerticalLayout implements BeforeLeaveObserver, BeforeEnterObserver  {
 
     @Autowired
-    SecurityViewHandler securityViewHandler;
+    SecurityViewService securityViewHandler;
 
     @Autowired
     CustomUserDetailsService userService;
     
     CustomSignupForm signupForm;
    
-    public SignupPageView(SecurityViewHandler securityViewHandler, CustomUserDetailsService userService) {
+    public SignupPageView(SecurityViewService securityViewHandler, CustomUserDetailsService userService) {
 
         this.signupForm = new CustomSignupForm(userService);
         

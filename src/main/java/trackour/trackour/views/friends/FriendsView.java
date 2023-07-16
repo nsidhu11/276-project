@@ -21,16 +21,15 @@ import jakarta.annotation.security.RolesAllowed;
 
 import trackour.trackour.model.CustomUserDetailsService;
 import trackour.trackour.model.User;
-import trackour.trackour.security.SecurityService;
-import trackour.trackour.security.SecurityViewHandler;
+import trackour.trackour.security.SecurityViewService;
 import trackour.trackour.views.home.NavBar;
 
 @Route("friends")
 @PageTitle("Friends")
 @RolesAllowed({"ADMIN", "USER"})
 public class FriendsView extends VerticalLayout{
-    SecurityViewHandler securityViewHandler;
-    SecurityService securityService;
+    SecurityViewService securityViewHandler;
+    SecurityViewService securityService;
     CustomUserDetailsService customUserDetailsService;
 
     Grid<User> currentFriendsGrid = new Grid<>(User.class, false);
@@ -39,16 +38,16 @@ public class FriendsView extends VerticalLayout{
     User currentUser;
     User friend;
 
-    public FriendsView(SecurityViewHandler securityViewHandler, SecurityService securityService,
+    public FriendsView(SecurityViewService securityViewHandler, SecurityViewService securityService,
         CustomUserDetailsService customUserDetailsService) {
 
             this.securityViewHandler = securityViewHandler;
             this.securityService = securityService;
             this.customUserDetailsService = customUserDetailsService;
 
-            this.currentUser = customUserDetailsService.getByUsername(securityService.getAuthenticatedUser().getUsername()).get();
+            this.currentUser = customUserDetailsService.getByUsername(securityService.getAuthenticatedRequestSession().getUsername()).get();
 
-            NavBar navigation = new NavBar(securityService, customUserDetailsService, securityViewHandler);
+            NavBar navigation = new NavBar(customUserDetailsService, securityViewHandler);
 
             H3 friendRequestTitle = new H3("Add a new friend");
             TextField friendRequestInput = new TextField("Enter Username");
@@ -188,8 +187,8 @@ public class FriendsView extends VerticalLayout{
 
         if(currentUser.getFriendRequests() != null) {
             for (Long request : currentUser.getFriendRequests()) {
-                if(customUserDetailsService.get(request).isPresent()) {
-                    friendRequests.add(customUserDetailsService.get(request).get());
+                if(customUserDetailsService.getByUid(request).isPresent()) {
+                    friendRequests.add(customUserDetailsService.getByUid(request).get());
                 }
             } 
         }
@@ -247,8 +246,8 @@ public class FriendsView extends VerticalLayout{
 
         if(currentUser.getFriends() != null) {
             for (Long friend : currentUser.getFriends()) {
-                if(customUserDetailsService.get(friend).isPresent()) {
-                    friends.add(customUserDetailsService.get(friend).get());
+                if(customUserDetailsService.getByUid(friend).isPresent()) {
+                    friends.add(customUserDetailsService.getByUid(friend).get());
                 }
             } 
         }

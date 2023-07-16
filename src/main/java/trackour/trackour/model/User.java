@@ -1,4 +1,5 @@
 package trackour.trackour.model;
+import java.time.LocalDateTime;
 // import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.hibernate.annotations.Type;
+import org.springframework.format.annotation.DateTimeFormat;
 
 // import org.springframework.security.core.GrantedAuthority;
 // import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -64,6 +66,10 @@ public class User {
     @JsonIgnore
     @Column(name = "passwordResetToken")
     private String passwordResetToken;
+
+    @DateTimeFormat
+    @Column(name = "passwordResetTokenCreatedAt")
+    private LocalDateTime passwordResetTokenCreatedAt;
     
     private String displayName;
 
@@ -82,15 +88,8 @@ public class User {
     @Column(name = "friends", columnDefinition = "bigint[]")
     private List<Long> friends;
 
-    /**
-     * Create a one-to-many relationship of {@link User} entity to {@link Role}
-     * called "user_roles". This table stores only a foreign key representing the user uid
-     * and a role. Users can have an indefinite number of roles and so there can be an
-     * indefinite number of the same uid in this table but each 
-     * representing a different role for that particular user
-     */
+    // roles are now stored in a set directly in the roles column of the users table
     @Enumerated(EnumType.STRING)
-    @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
     private void initRole() {
@@ -157,7 +156,14 @@ public class User {
     public String getPasswordResetToken() {
         return this.passwordResetToken;
     }
-    
+
+    public LocalDateTime getPasswordResetTokenCreatedAt() {
+        return this.passwordResetTokenCreatedAt;
+    }
+
+    public void setPasswordResetTokenCreatedAt(LocalDateTime passwordResetTokenCreatedAt) { 
+        this.passwordResetTokenCreatedAt = passwordResetTokenCreatedAt;
+    }    
 
     public void setEmail(String email) {
         this.email = email;

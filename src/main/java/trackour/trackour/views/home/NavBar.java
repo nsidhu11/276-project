@@ -22,17 +22,14 @@ import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.RouterLink;
 
 import trackour.trackour.model.CustomUserDetailsService;
-import trackour.trackour.security.SecurityService;
-import trackour.trackour.security.SecurityViewHandler;
+import trackour.trackour.security.SecurityViewService;
 import trackour.trackour.views.friends.FriendsView;
 
 public class NavBar {
-    SecurityService securityService;
-    SecurityViewHandler securityViewHandler;
+    SecurityViewService securityViewHandler;
     CustomUserDetailsService customUserDetailsService;
 
-    public NavBar(SecurityService securityService, CustomUserDetailsService customUserDetailsService, SecurityViewHandler securityViewHandler){
-        this.securityService = securityService;
+    public NavBar(CustomUserDetailsService customUserDetailsService, SecurityViewService securityViewHandler){
         this.customUserDetailsService = customUserDetailsService;
         this.securityViewHandler = securityViewHandler;
     }
@@ -45,10 +42,10 @@ public class NavBar {
         routeTabs.add(new RouterLink("HOME", HomeView.class));
         routeTabs.add(new RouterLink("FRIENDS", FriendsView.class));
         
-        String sessionUsername = securityService.getAuthenticatedUser().getUsername();
+        String sessionUsername = securityViewHandler.getAuthenticatedRequestSession().getUsername();
         // since logged in, no need to verify if this optional is empty
         String displayNameString = customUserDetailsService.getByUsername(sessionUsername).get().getDisplayName();
-        Text displayNameTxt = new Text("@" + displayNameString);
+        Text displayNameTxt = new Text(displayNameString);
         Button signUpButton = new Button("Sign Up");
         signUpButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         signUpButton.addClassName("button-hover-effect");

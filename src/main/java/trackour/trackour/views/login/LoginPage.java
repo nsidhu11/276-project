@@ -12,7 +12,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-import trackour.trackour.security.SecurityViewHandler;
+import trackour.trackour.security.SecurityViewService;
 import trackour.trackour.views.signup.SignupPageView;
 
 @Route("login")
@@ -21,12 +21,12 @@ import trackour.trackour.views.signup.SignupPageView;
 
 public class LoginPage extends VerticalLayout implements BeforeLeaveObserver, BeforeEnterObserver {
     
-    SecurityViewHandler securityViewHandler;
+    SecurityViewService securityViewHandler;
 
     private LoginForm login = new LoginForm();
 
     // inject view auth handler
-    public LoginPage(SecurityViewHandler securityViewHandler) {
+    public LoginPage(SecurityViewService securityViewHandler) {
         this.securityViewHandler = securityViewHandler;
 
         addClassName("login-view");

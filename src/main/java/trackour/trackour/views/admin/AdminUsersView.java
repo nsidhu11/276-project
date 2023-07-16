@@ -32,8 +32,7 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import trackour.trackour.model.CustomUserDetailsService;
 import trackour.trackour.model.User;
-import trackour.trackour.security.SecurityService;
-import trackour.trackour.security.SecurityViewHandler;
+import trackour.trackour.security.SecurityViewService;
 
 @Route("admin/view-users")
 // Admins are users but also have the "admin" special role so pages that can be viewed by
@@ -42,17 +41,13 @@ import trackour.trackour.security.SecurityViewHandler;
 public class AdminUsersView extends VerticalLayout {
 
     @Autowired
-    SecurityViewHandler securityViewHandler;
-
-    @Autowired
-    SecurityService securityService;
+    SecurityViewService securityViewHandler;
     
     @Autowired
     CustomUserDetailsService customUserDetailsService;
     
-    public AdminUsersView(SecurityViewHandler securityViewHandler, SecurityService securityService, CustomUserDetailsService customUserDetailsService) {
+    public AdminUsersView(SecurityViewService securityViewHandler, CustomUserDetailsService customUserDetailsService) {
         this.securityViewHandler = securityViewHandler;
-        this.securityService = securityService;
         this.customUserDetailsService = customUserDetailsService;
 
         this.setHeightFull();       
@@ -63,10 +58,10 @@ public class AdminUsersView extends VerticalLayout {
     private HorizontalLayout doDesignNavBar() {
         H1 header = new H1("Trackour");
         
-        String sessionUsername = securityService.getAuthenticatedUser().getUsername();
+        String sessionUsername = securityViewHandler.getAuthenticatedRequestSession().getUsername();
         // since logged in, no need to verify if this optional is empty
         String displayNameString = customUserDetailsService.getByUsername(sessionUsername).get().getDisplayName();
-        Text displayNameTxt = new Text("@" + displayNameString);
+        Text displayNameTxt = new Text(displayNameString);
         Button signUpButton = new Button("Sign Up");
         signUpButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         signUpButton.addClassName("button-hover-effect");
@@ -146,7 +141,7 @@ public class AdminUsersView extends VerticalLayout {
         Button delButton = new Button(delBtnIcon, (ev) -> {
             // delete that user record
             this.customUserDetailsService.delete(userRecord.getUid());
-            boolean isAdminDeletingThemself = securityService.getAuthenticatedUser().getUsername().equals(userRecord.getUsername());
+            boolean isAdminDeletingThemself = securityViewHandler.getAuthenticatedRequestSession().getUsername().equals(userRecord.getUsername());
             if (isAdminDeletingThemself) {
                 securityViewHandler.logOut();
                 this.getUI().get().getPage().setLocation("");
