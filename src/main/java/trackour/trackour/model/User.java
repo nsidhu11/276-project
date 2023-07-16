@@ -1,9 +1,12 @@
 package trackour.trackour.model;
 // import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 // import java.util.stream.Collectors;
 import java.util.UUID;
+
+import org.hibernate.annotations.Type;
 
 // import org.springframework.security.core.GrantedAuthority;
 // import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,6 +14,7 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.*;
 
 @Entity
@@ -69,6 +73,14 @@ public class User {
 
     @Column(name = "email")
     private String email;
+
+    @Type(ListArrayType.class)
+    @Column(name = "friend_requests", columnDefinition = "bigint[]")
+    private List<Long> friendRequests;
+
+    @Type(ListArrayType.class)
+    @Column(name = "friends", columnDefinition = "bigint[]")
+    private List<Long> friends;
 
     /**
      * Create a one-to-many relationship of {@link User} entity to {@link Role}
@@ -153,5 +165,21 @@ public class User {
 
     public String getEmail() {
         return this.email;
+    }
+
+    public List<Long> getFriendRequests() {
+        return friendRequests;
+    }
+
+    public void setFriendRequests(List<Long> friendRequests) {
+        this.friendRequests = friendRequests;
+    }
+
+    public List<Long> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<Long> friends) {
+        this.friends = friends;
     }
 }

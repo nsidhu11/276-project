@@ -159,4 +159,16 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return true;
     }
+
+    //only use this one if no changes to the password have been made
+    public boolean updateUser(User user) {
+        Optional<User> existingUser = getByUsername(user.getUsername());
+        if(!existingUser.isPresent()){
+            return false;
+        }
+
+        update(user);
+        
+        return true;
+    }
 }
