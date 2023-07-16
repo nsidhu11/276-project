@@ -3,12 +3,7 @@ package trackour.trackour.views.forgotPassword;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-//import com.vaadin.flow.component.button.Button;
-//import com.vaadin.flow.component.html.H3;
-//import com.vaadin.flow.component.html.Span;
-//import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-//import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.BeforeEvent;
@@ -19,15 +14,13 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
-import trackour.trackour.models.CustomUserDetailsService;
-import trackour.trackour.models.User;
+import trackour.trackour.model.CustomUserDetailsService;
+import trackour.trackour.model.User;
 import trackour.trackour.security.SecurityViewHandler;
-//import trackour.trackour.views.signup.CustomSignupForm;
 
-@Route("resetPassword/token")
-@PageTitle("Reset Password")
+@Route(value = "resetPassword")
+@PageTitle("Set New Password")
 @AnonymousAllowed
-
 public class ResetPasswordView extends VerticalLayout implements BeforeLeaveObserver, BeforeEnterObserver, HasUrlParameter<String> {
 
     @Autowired
@@ -37,7 +30,7 @@ public class ResetPasswordView extends VerticalLayout implements BeforeLeaveObse
     CustomUserDetailsService userService;
 
     ResetPasswordForm resetPasswordForm;
-
+    
     User user;
 
     String token;
@@ -65,20 +58,29 @@ public class ResetPasswordView extends VerticalLayout implements BeforeLeaveObse
     public void setParameter(BeforeEvent event, String parameter){
         this.token = parameter;
 
+        System.out.println("this.token: " + this.token);
+
         if (userService.getByPasswordResetToken(parameter).isPresent()) {
             this.user = userService.getByPasswordResetToken(parameter).get();
 
             this.resetPasswordForm = new ResetPasswordForm(userService, user);
-        
             // Center the form
             setAlignItems(FlexComponent.Alignment.CENTER);
 
             add(resetPasswordForm);
         }
+        else{
+            System.out.println("showing error page since token is invalid");
+            // else display an error page
+            event.rerouteTo("error");
+        }
     }
 
-    public ResetPasswordView(SecurityViewHandler securityViewHandler, CustomUserDetailsService userService) {
+    public ResetPasswordView(
+        SecurityViewHandler securityViewHandler,
+        CustomUserDetailsService userService) {
         this.userService = userService;
+        this.securityViewHandler = securityViewHandler;
     }
     
 }

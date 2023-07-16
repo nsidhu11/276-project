@@ -12,7 +12,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 
-import trackour.trackour.models.Role;
+import trackour.trackour.model.Role;
 
 /**
  * This class includes "View-manipulation" methods
@@ -31,7 +31,7 @@ public class SecurityViewHandler {
      * anonymous or unauthenticated users and admins only
      * 
      */
-    public void handleAnonymousOnly(BeforeEnterEvent beforEnterEvent, Boolean excludeFromPage){
+    public void handleAnonymousOnly(BeforeEnterEvent beforEnterEvent, Boolean excludeForAdmin){
         // only anonymous user sessions and admins are allowed
         boolean isAuthenticatedUser = getRequestSession().isPresent();
         Optional<UserDetails> userSession = getRequestSession();
@@ -43,10 +43,9 @@ public class SecurityViewHandler {
         System.out.println("isUserAdmin: " + isUserAdmin);
 
         if (isAuthenticatedUser){
-            // allow this page to bypass the redirection protocol
-            if (excludeFromPage && isUserAdmin) return;
+            // allow this page to bypass the redirection protocol for admins
+            if (excludeForAdmin && isUserAdmin) return;
             beforEnterEvent.rerouteTo("error");
-            return;
         }
     }
 

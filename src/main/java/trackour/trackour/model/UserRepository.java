@@ -1,4 +1,4 @@
-package trackour.trackour.models;
+package trackour.trackour.model;
 
 import java.util.Optional;
 

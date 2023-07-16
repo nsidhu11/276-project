@@ -1,5 +1,7 @@
 package trackour.trackour.views.forgotPassword;
 
+import java.util.Optional;
+
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -13,14 +15,16 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.router.RouterLink;
 
-import trackour.trackour.models.CustomUserDetailsService;
-import trackour.trackour.models.User;
-import trackour.trackour.views.login.LoginPage;
+import trackour.trackour.model.CustomUserDetailsService;
+import trackour.trackour.model.User;
 
 public class ResetPasswordForm extends VerticalLayout {
-    CustomUserDetailsService userService;
 
+    CustomUserDetailsService userService;
+    
     User user;
+
+    String token;
 
     private H3 title;
     
@@ -51,9 +55,10 @@ public class ResetPasswordForm extends VerticalLayout {
         this.submit.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         //link to login page
-        this.loginLink = new RouterLink("return to login page", LoginPage.class);
+        // this.loginLink = new RouterLink("return to login page", LoginPage.class);
 
-        add(title, doFormLayout(), errorMessageField, loginLink);
+        // add(title, doFormLayout(), errorMessageField, loginLink);
+        add(title, doFormLayout(), errorMessageField);
 
         Binder<User> binder = new Binder<>(User.class);
 
@@ -74,13 +79,21 @@ public class ResetPasswordForm extends VerticalLayout {
                 }
                 if (binder.isValid()) {
                         System.out.println("Validations all passed!");
-                        // if no errors occured during validation, register/call userservice registration method
-                        System.out.println("Updating user is:");
-                        user.setPasswordResetToken(null);
-                        userService.updatePassword(user);
+                        // retrieve the user record with this token
+                        Optional<User> existingUser = userService.get(user.getUid());
+                        if (existingUser.isPresent()){
+                            Long uid = user.getUid();
+                            System.out.println("user "+ uid + "pass changed");
+                            // // set new password
+                            userService.updatePassword(user);
+                        }                        
                         UI.getCurrent().navigate("redirect:/login");
                 }
         });
+    }
+
+    public void setUserDTO(User user) {
+        this.user = user;
     }
     
     private FormLayout doFormLayout() {

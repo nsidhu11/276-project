@@ -1,19 +1,19 @@
 package trackour.trackour.views.home;
 
-import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+//import com.vaadin.flow.component.Text;
+//import com.vaadin.flow.component.UI;
+//import com.vaadin.flow.component.button.Button;
+//import com.vaadin.flow.component.button.ButtonVariant;
+//import com.vaadin.flow.component.combobox.ComboBox;
+//import com.vaadin.flow.component.html.H1;
+//import com.vaadin.flow.component.orderedlayout.FlexComponent;
+//import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
+//import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 import jakarta.annotation.security.RolesAllowed;
-import trackour.trackour.models.CustomUserDetailsService;
+import trackour.trackour.model.CustomUserDetailsService;
 import trackour.trackour.security.SecurityService;
 import trackour.trackour.security.SecurityViewHandler;
 
@@ -23,6 +23,7 @@ import trackour.trackour.security.SecurityViewHandler;
 @RolesAllowed({"ADMIN", "USER"})
 public class HomeView extends VerticalLayout {
     public HomeView(SecurityViewHandler securityViewHandler, SecurityService securityService, CustomUserDetailsService customUserDetailsService) {
+        /*
         H1 header = new H1("Trackour");
         
         String sessionUsername = securityService.getAuthenticatedUser().getUsername();
@@ -61,7 +62,10 @@ public class HomeView extends VerticalLayout {
         topNavBar.expand(header);
         topNavBar.expand(searchField);
         topNavBar.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+        */
 
-        add(topNavBar);
+        NavBar navigation = new NavBar(securityService,customUserDetailsService,securityViewHandler);
+
+        add(navigation.generateNavBar());
     }
 }

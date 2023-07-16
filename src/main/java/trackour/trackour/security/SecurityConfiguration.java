@@ -1,9 +1,7 @@
 package trackour.trackour.security;
-// import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.spring.security.VaadinWebSecurity;
 
-import trackour.trackour.models.CustomUserDetailsService;
-// import trackour.trackour.models.Role;
+import trackour.trackour.model.CustomUserDetailsService;
 import trackour.trackour.views.login.LoginPage;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +36,7 @@ public class SecurityConfiguration extends VaadinWebSecurity {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         
         authProvider.setUserDetailsService(this.customUserDetailsService);
-        authProvider.setPasswordEncoder(customUserDetailsService.passwordEncoder());
+        authProvider.setPasswordEncoder(CustomUserDetailsService.passwordEncoder());
     
         return authProvider;
     }
@@ -61,7 +59,8 @@ public class SecurityConfiguration extends VaadinWebSecurity {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // Can be used for rest api endpoints
-        // http.authorizeHttpRequests(requests -> requests.requestMatchers("/signup").permitAll());
+        // http.authorizeHttpRequests(requests -> requests.requestMatchers("/resetPassword/**").permitAll());
+        // http.authorizeHttpRequests(requests -> requests.requestMatchers("/resetPassword/**").hasAnyAuthority("ADMIN"));
         // http.authorizeHttpRequests(requests -> requests.requestMatchers("/secret").hasAnyRole("ADMIN"));
 
         // http
