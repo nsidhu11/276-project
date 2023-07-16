@@ -39,18 +39,8 @@ public class SignupPageView extends VerticalLayout implements BeforeLeaveObserve
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         // this method call reroutes get requests to this view if the current session is already authenticated
         this.securityViewHandler.handleAnonymousOnly(beforeEnterEvent, true);
-        if (beforeEnterEvent.getLocation()
-                .getQueryParameters()
-                .getParameters()
-                .containsKey("error")) {
-        }
     }
 
     @Override
-    public void beforeLeave(BeforeLeaveEvent event) {
-        // reroute to error page
-        if (event.hasUnknownReroute()){
-            System.out.println("Rerouting to Error Page!");
-        }
-    }
+    public void beforeLeave(BeforeLeaveEvent event) {}
 }

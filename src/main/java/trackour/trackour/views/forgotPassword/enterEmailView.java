@@ -1,6 +1,7 @@
 package trackour.trackour.views.forgotPassword;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -111,6 +112,8 @@ public class enterEmailView extends VerticalLayout implements BeforeLeaveObserve
                 String token = user.getPasswordResetToken();
                 System.out.println("Password token: " + token);
                 System.out.println("currentUrl: " + currentUrl);
+                // mark token timestamp
+                user.setPasswordResetTokenCreatedAt(LocalDateTime.now());
                 customUserDetailsService.update(user);
                 sendResetLink(currentUrl, token, email);
             });
@@ -127,7 +130,7 @@ public class enterEmailView extends VerticalLayout implements BeforeLeaveObserve
     void sendResetLink(URL currentUrl, String token, String recipientEmail) {
         String resetLink = currentUrl.toString() + "/" + token;
         System.out.println("link: " + resetLink);
-        ResetLinkHandler resetLinkHandler = new ResetLinkHandler(
+        ResetLinkService resetLinkHandler = new ResetLinkService(
             this.mailHost,
             this.mailPort,
             this.mailUsername,
@@ -137,26 +140,15 @@ public class enterEmailView extends VerticalLayout implements BeforeLeaveObserve
         );
 
         resetLinkHandler.sendEmail();
-        // this.mailHost
     }
 
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         // this method call reroutes get requests to this view if the current session is already authenticated
         this.securityService.handleAnonymousOnly(beforeEnterEvent, true);
-        if (beforeEnterEvent.getLocation()
-                .getQueryParameters()
-                .getParameters()
-                .containsKey("error")) {
-        }
     }
 
     @Override
-    public void beforeLeave(BeforeLeaveEvent event) {
-        // reroute to error page
-        if (event.hasUnknownReroute()){
-            System.out.println("Rerouting to Error Page!");
-        }
-    }
+    public void beforeLeave(BeforeLeaveEvent event) {}
     
 }

@@ -8,6 +8,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -151,29 +152,21 @@ public class FriendsView extends VerticalLayout{
         List<Long> friendRequests = this.friend.getFriendRequests();
         List<Long> friends = this.currentUser.getFriends();
 
-        //check if user has already sent a request, or is already friends with the user
-        if(friendRequests != null) {
-            for(Long requests : friendRequests) {
-                if(requests == this.currentUser.getUid()) {
-                    text.setText("Request already sent to " + username + "!");
-                    return;
-                }
-            }
-            if(currentUser.getFriends() != null){
-                for(Long currentFriend : friends) {
-                    if(currentFriend == this.friend.getUid()) {
-                        text.setText("You are already friends with " + username + "!");
-                        return;
-                    }
-                }
-            }
-        }
-        
-        //add new friend request to friend's list and update DB
         if(friendRequests == null) {
             friendRequests = new ArrayList<Long>();
         }
-
+        //check if user has already sent a request, or is already friends with the user
+        if (friendRequests.contains(this.currentUser.getUid())){
+            text.setText("Request already sent to " + username + "!");
+            return;
+        }
+        if (friends.contains(this.friend.getUid())) {
+            text.setText("You are already friends with " + username + "!");
+            return;
+        }
+        
+        //add new friend request to friend's list and update DB
+        // friendRequests.contains(this.currentUser.getUid())
         friendRequests.add(this.currentUser.getUid());
         friend.setFriendRequests(friendRequests);
 
@@ -213,6 +206,7 @@ public class FriendsView extends VerticalLayout{
         Button button = new Button(icon, (ev) -> {
             List<Long> requests = this.currentUser.getFriendRequests();
             List<Long> friends = this.currentUser.getFriends();
+            var otherUserRequests = newFriend.getFriendRequests();
             if (friends == null) {
                 friends = new ArrayList<Long>();
             }
@@ -223,7 +217,10 @@ public class FriendsView extends VerticalLayout{
             }
 
             friends.add(newFriend.getUid());
+
+            // remove the requst from this user's requests list as well as from the added user's request list
             requests.remove(newFriend.getUid());
+            otherUserRequests.remove(currentUser.getUid());
 
             newFriendFriends.add(this.currentUser.getUid());
 
