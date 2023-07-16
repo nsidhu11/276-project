@@ -114,6 +114,7 @@ public class FriendsView extends VerticalLayout{
             }
     }
 
+    //friend request grid
     private void configureRequestGrid() {
         this.friendRequestGrid.addClassNames("friend-requests-grid");
         this.friendRequestGrid.setSizeFull();
@@ -124,6 +125,7 @@ public class FriendsView extends VerticalLayout{
         this.friendRequestGrid.setItems(findRequests());
     }
 
+    //friends grid
     private void configureFriendsGrid() {
         this.currentFriendsGrid.addClassNames("friends-grid");
         this.currentFriendsGrid.setSizeFull();
