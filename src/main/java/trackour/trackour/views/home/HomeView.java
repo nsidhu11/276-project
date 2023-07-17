@@ -1,5 +1,6 @@
 package trackour.trackour.views.home;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,22 +11,27 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 import jakarta.annotation.security.RolesAllowed;
-
+import se.michaelthelin.spotify.model_objects.specification.AlbumSimplified;
 import trackour.trackour.models.CustomUserDetailsService;
 import trackour.trackour.security.SecurityViewHandler;
+import trackour.trackour.spotify.newReleases;
 
 @Route("")
 // Admins are users but also have the "admin" special role so pages that can be
@@ -84,35 +90,53 @@ public class HomeView extends VerticalLayout {
 
         add(topNavBar);
 
-        // Button goToNewReleasesButton = new Button("Go to New Releases");
-        // goToNewReleasesButton.addClickListener(e -> {
-        // // Redirect to the "new-releases" view
-        // getUI().ifPresent(ui -> ui.navigate(newRelease.class));
-        // });
+        H2 newRelease = new H2("New Releases");
+        newRelease.getStyle().set("margin-left", "25px");
+        HorizontalLayout tLayout = new HorizontalLayout();
+        List<AlbumSimplified> albums = newReleases.getNewReleases();
+        Scroller trendinScroller = new Scroller();
+        trendinScroller.setScrollDirection(Scroller.ScrollDirection.HORIZONTAL);
+        for (AlbumSimplified album : albums) {
+            Image coverImage = new Image(album.getImages()[0].getUrl(), "Album Cover");
+            coverImage.setWidth("200px");
+            coverImage.setHeight("200px");
+            Icon playIcon = new Icon(VaadinIcon.PLAY_CIRCLE);
+            playIcon.setColor("Green");
 
-        // add(goToNewReleasesButton);
+            Button albumButton = new Button(coverImage);
+            // albumButton.setIcon(playIcon);
+            albumButton.getStyle().setWidth("200px");
+            albumButton.getStyle().setHeight("200px");
+            albumButton.setId("albumB");
+            albumButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+
+            // albumButton.getElement().addEventListener("onmouseover", e -> {
+            // albumButton.setIcon(playIcon);
+            // });
+            albumButton.addClickListener(e -> {
+                // Handle button click event here
+            });
+
+            Div albumInfo = new Div(new Text(album.getName()));
+            albumInfo.setWidth("200px");
+            VerticalLayout albumLayout = new VerticalLayout();
+            albumLayout.add(albumButton, albumInfo);
+
+            tLayout.add(albumLayout);
+        }
+        trendinScroller.setContent(tLayout);
+        add(newRelease, trendinScroller);
 
         H2 trendingSongs = new H2("Trending Now");
-        trendingSongs.getStyle().set("margin-left", "25px");
-        HorizontalLayout trendingLayout = new HorizontalLayout();
-        trendingLayout.setPadding(true);
-        trendingLayout.getStyle().set("margin-left", "50px");
-        Button specialButton = new Button("Song 1");
-        specialButton.addClassName("special");
-        trendingLayout.add(specialButton);
-        trendingLayout.add(new Button("Song 2"));
-        trendingLayout.add(new Button("Song 3"));
-        add(trendingSongs, trendingLayout);
-
-        H2 newRelease = new H2("New Releases");
         HorizontalLayout newReleaseLayout = new HorizontalLayout();
-        newRelease.getStyle().set("margin-left", "25px");
+        trendingSongs.getStyle().set("margin-left", "25px");
         newReleaseLayout.setPadding(true);
         newReleaseLayout.getStyle().set("margin-left", "50px");
         newReleaseLayout.add(new Button("Song 1"));
         newReleaseLayout.add(new Button("Song 2"));
         newReleaseLayout.add(new Button("Song 3"));
-        add(newRelease, newReleaseLayout);
+
+        add(trendingSongs, newReleaseLayout);
 
         H2 utiliy = new H2("Audio Utility");
         add(utiliy);

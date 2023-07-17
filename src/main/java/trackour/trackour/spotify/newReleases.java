@@ -2,11 +2,10 @@ package trackour.trackour.spotify;
 
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
-import se.michaelthelin.spotify.model_objects.specification.Album;
 import se.michaelthelin.spotify.requests.data.browse.GetListOfNewReleasesRequest;
-import se.michaelthelin.spotify.requests.data.albums.GetSeveralAlbumsRequest;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.model_objects.specification.AlbumSimplified;
+
 import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
@@ -16,7 +15,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
-public class trendingAlbums {
+public class newReleases {
     private static final String accessToken = clientCred.getAccessToken();
     private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
             .setAccessToken(accessToken)
@@ -40,11 +39,6 @@ public class trendingAlbums {
     public static void getListOfNewReleases_Async() {
         try {
             final CompletableFuture<Paging<AlbumSimplified>> pagingFuture = getListOfNewReleasesRequest.executeAsync();
-
-            // Thread free to do other tasks...
-
-            // Example Only. Never block in production code.
-
             final Paging<AlbumSimplified> albumSimplifiedPaging = pagingFuture.join();
             AlbumSimplified[] albumsArray = albumSimplifiedPaging.getItems();
             List<AlbumSimplified> albums = Arrays.asList(albumsArray);
@@ -60,8 +54,15 @@ public class trendingAlbums {
         }
     }
 
-    public static void main(String[] args) {
-        getListOfNewReleases_Sync();
-        getListOfNewReleases_Async();
+    public static List<AlbumSimplified> getNewReleases() {
+
+        final CompletableFuture<Paging<AlbumSimplified>> pagingFuture = getListOfNewReleasesRequest.executeAsync();
+        final Paging<AlbumSimplified> albumSimplifiedPaging = pagingFuture.join();
+
+        return Arrays.asList(albumSimplifiedPaging.getItems());
     }
+
+    // public static void main(String[] args) {
+    // getNewReleases();
+    // }
 }
