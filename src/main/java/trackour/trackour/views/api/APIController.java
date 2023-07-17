@@ -11,13 +11,18 @@ import se.michaelthelin.spotify.enums.Modality;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.credentials.ClientCredentials;
 import se.michaelthelin.spotify.model_objects.specification.Album;
+import se.michaelthelin.spotify.model_objects.specification.AlbumSimplified;
+import se.michaelthelin.spotify.model_objects.specification.Artist;
 import se.michaelthelin.spotify.model_objects.specification.ArtistSimplified;
 import se.michaelthelin.spotify.model_objects.specification.AudioFeatures;
+import se.michaelthelin.spotify.model_objects.specification.Image;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.model_objects.specification.Recommendations;
 import se.michaelthelin.spotify.model_objects.specification.Track;
+import se.michaelthelin.spotify.model_objects.specification.TrackSimplified;
 import se.michaelthelin.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
 import se.michaelthelin.spotify.requests.data.albums.GetAlbumRequest;
+import se.michaelthelin.spotify.requests.data.artists.GetArtistRequest;
 import se.michaelthelin.spotify.requests.data.browse.GetRecommendationsRequest;
 import se.michaelthelin.spotify.requests.data.search.simplified.SearchTracksRequest;
 import se.michaelthelin.spotify.requests.data.tracks.GetAudioFeaturesForTrackRequest;
@@ -30,8 +35,8 @@ public class APIController {
 
     // create a SpotifyApi Builder object and set the Client ID and Client Secret
     private static final SpotifyApi spotifyAPI = new SpotifyApi.Builder()
-        .setClientId("5d3433cc338a403d965f77d06e65ce86")
-        .setClientSecret("02323e07bb74463c84d2f425f1a8439f")
+        .setClientId(ClientKeys.CLIENT_ID.getKey())
+        .setClientSecret(ClientKeys.CLIENT_SECRET.getKey())
         .build();
 
     // create a ClientCredentialsRequest object which allows access to access tokens
@@ -305,7 +310,47 @@ public class APIController {
         }
     }
 
-    // Get the name of the album
+    // Get the Album of the specified Track
+    public static AlbumSimplified getAlbum(String id) {
+        try {
+            final ClientCredentials clientCredentials = clientCredentialsRequest.execute();
+
+            spotifyAPI.setAccessToken(clientCredentials.getAccessToken());
+
+            final GetTrackRequest getTrackRequest = spotifyAPI.getTrack(id)
+                .build();
+            
+            final Track track = getTrackRequest.execute();
+
+            return track.getAlbum();
+
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    // Get the Artist name by the Spotify Artist ID
+    public static String getArtistName(String id) {
+        try {
+            final ClientCredentials clientCredentials = clientCredentialsRequest.execute();
+
+            spotifyAPI.setAccessToken(clientCredentials.getAccessToken());
+
+            final GetArtistRequest getArtistRequest = spotifyAPI.getArtist(id)
+                .build();
+            
+            final Artist artist = getArtistRequest.execute();
+
+            return artist.getName();
+
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    // Get the name of the album using the Spotify Album ID
     public static String getAlbumName(String id) {
         try {
             final ClientCredentials clientCredentials = clientCredentialsRequest.execute();
@@ -319,9 +364,118 @@ public class APIController {
 
             return album.getName();
 
-        }  catch (IOException | SpotifyWebApiException | ParseException e) {
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
             return e.getMessage();
         }
     }
 
+    // Get an array of Album Cover images in different sizes of the specified Album ID
+    public static Image[] getAlbumImage(String id) {
+        try {
+            final ClientCredentials clientCredentials = clientCredentialsRequest.execute();
+
+            spotifyAPI.setAccessToken(clientCredentials.getAccessToken());
+
+            final GetAlbumRequest getAlbumRequest = spotifyAPI.getAlbum(id)
+                .build();
+
+            final Album album = getAlbumRequest.execute();
+
+            return album.getImages();
+
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    // Get an array of Artists from the Spotify Track ID
+    public static ArtistSimplified[] getArtistFromTrack(String id) {
+        try {
+            final ClientCredentials clientCredentials = clientCredentialsRequest.execute();
+
+            spotifyAPI.setAccessToken(clientCredentials.getAccessToken());
+
+            final GetTrackRequest getTrackRequest = spotifyAPI.getTrack(id)
+                .build();
+
+            final Track track = getTrackRequest.execute();
+
+            return track.getArtists();
+
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    // Get tracks based on specifc audio features
+    public static TrackSimplified[] getRecommendations(float acousticness, float danceability, float energy, float instrumentalness,
+                                                        int key, float loudness, int mode, float tempo, int timeSignature, float valence) {
+        try {
+            final ClientCredentials clientCredentials = clientCredentialsRequest.execute();
+
+            spotifyAPI.setAccessToken(clientCredentials.getAccessToken());
+
+            final GetRecommendationsRequest getRecommendationsRequest = spotifyAPI.getRecommendations()
+                .limit(10)
+                .target_acousticness(acousticness)
+                .target_danceability(danceability)
+                .target_energy(energy)
+                .target_instrumentalness(instrumentalness)
+                .target_key(key)
+                .target_loudness(loudness)
+                .target_mode(mode)
+                .target_tempo(tempo)
+                .target_time_signature(timeSignature)
+                .target_valence(valence)
+                .build();
+
+            final Recommendations recommendations = getRecommendationsRequest.execute();
+
+            return recommendations.getTracks();
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    // Search tracks based on a String and how many results you want returned
+    public static Paging<Track> searchTracks(String title, int num) {
+        try {
+            final ClientCredentials clientCredentials = clientCredentialsRequest.execute();
+
+            spotifyAPI.setAccessToken(clientCredentials.getAccessToken());
+
+            final SearchTracksRequest searchTracksRequest = spotifyAPI.searchTracks(title)
+                .limit(num)
+                .offset(0)
+                .build();
+
+            final Paging<Track> trackPaging = searchTracksRequest.execute();
+
+            return trackPaging;
+            
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static void main(String[] args) {
+        Paging<Track> test = searchTracks("Ain't No Way by denzel curry", 5);
+        Track[] tracks = test.getItems();
+
+        for (int i = 0; i < tracks.length; i++) {
+
+            ArtistSimplified[] artists = getArtistFromTrack(tracks[i].getId());
+            System.out.println(tracks[i].getName() + " by ");
+            
+            for (int j = 0; j < artists.length; j++) {
+                System.out.print(artists[j].getName() + ", ");
+            }
+
+            System.out.println();
+        }
+    }
 }
