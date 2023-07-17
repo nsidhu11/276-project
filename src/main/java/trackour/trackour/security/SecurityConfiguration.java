@@ -1,4 +1,5 @@
 package trackour.trackour.security;
+
 // import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.spring.security.VaadinWebSecurity;
 
@@ -30,21 +31,23 @@ public class SecurityConfiguration extends VaadinWebSecurity {
     }
 
     /**
-     * {@link DaoAuthenticationProvider} object to authenticate username & password   
+     * {@link DaoAuthenticationProvider} object to authenticate username & password
+     * 
      * @return {@link DaoAuthenticationProvider}
      */
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        
+
         authProvider.setUserDetailsService(this.customUserDetailsService);
         authProvider.setPasswordEncoder(customUserDetailsService.passwordEncoder());
-    
+
         return authProvider;
     }
-    
+
     /**
      * Convert {@link AuthenticationManager} bean
+     * 
      * @param authConfiguration
      * @return
      * @throws Exception
@@ -56,26 +59,26 @@ public class SecurityConfiguration extends VaadinWebSecurity {
 
     /**
      * {@summary} Custom filter chain configuration & {@link VaadinWebSecurity}
-     *  handles the login logout behaviour
+     * handles the login logout behaviour
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // Can be used for rest api endpoints
-        // http.authorizeHttpRequests(requests -> requests.requestMatchers("/signup").permitAll());
-        // http.authorizeHttpRequests(requests -> requests.requestMatchers("/secret").hasAnyRole("ADMIN"));
+        // http.authorizeHttpRequests(requests ->
+        // requests.requestMatchers("/signup").permitAll());
+        // http.authorizeHttpRequests(requests ->
+        // requests.requestMatchers("/secret").hasAnyRole("ADMIN"));
 
         // http
-        // .authorizeHttpRequests(auth -> 
+        // .authorizeHttpRequests(auth ->
         // auth
         // .requestMatchers("/*").hasAnyRole(Role.ADMIN.getName()));
         super.configure(http);
 
-        
-        
         // Register your login view to the view access checker mechanism
-        setLoginView(http, LoginPage.class,"/login");
+        setLoginView(http, LoginPage.class, "/login");
         // session fixatioon protection
         // VaadinService.reinitializeSession(VaadinService.getCurrentRequest());
     }
-    
+
 }
