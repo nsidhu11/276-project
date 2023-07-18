@@ -24,18 +24,18 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 import se.michaelthelin.spotify.model_objects.specification.Category;
 
 import trackour.trackour.spotify.explore;
-import trackour.trackour.models.CustomUserDetailsService;
-import trackour.trackour.security.SecurityViewHandler;
+import trackour.trackour.model.CustomUserDetailsService;
+import trackour.trackour.security.SecurityViewService;
 
 @Route("Explore")
 @PageTitle("Login")
 @AnonymousAllowed
 
 public class ExploreView extends VerticalLayout {
-    public ExploreView(SecurityViewHandler securityViewHandler,
+    public ExploreView(SecurityViewService securityViewHandler,
             CustomUserDetailsService customUserDetailsService) {
 
-        Optional<UserDetails> username = securityViewHandler.getRequestSession();
+        Optional<UserDetails> username = securityViewHandler.getSessionOptional();
         String sessionUsername = username.get().getUsername();
         String displayNameString = customUserDetailsService.getByUsername(sessionUsername).get().getDisplayName();
 

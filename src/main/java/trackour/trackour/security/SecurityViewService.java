@@ -26,47 +26,52 @@ public class SecurityViewService {
     @Autowired
     private final AuthenticationContext authContext;
 
-    SecurityViewService (AuthenticationContext authContext) { this.authContext = authContext; }
-    
+    SecurityViewService(AuthenticationContext authContext) {
+        this.authContext = authContext;
+    }
+
     /**
      * Call this method to set any view as only accessible by
      * anonymous or unauthenticated users and admins only
      * 
      */
-    public void handleAnonymousOnly(BeforeEnterEvent beforEnterEvent, Boolean excludeFromPage){
+    public void handleAnonymousOnly(BeforeEnterEvent beforEnterEvent, Boolean excludeFromPage) {
         // only anonymous user sessions and admins are allowed
         boolean isAuthenticatedUser = getSessionOptional().isPresent();
         Optional<UserDetails> userSession = getSessionOptional();
         boolean isUserAdmin = false;
-        
-        if (userSession.isPresent()){
-            isUserAdmin = userSession.get().getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.roleToRoleString()));
+
+        if (userSession.isPresent()) {
+            isUserAdmin = userSession.get().getAuthorities()
+                    .contains(new SimpleGrantedAuthority(Role.ADMIN.roleToRoleString()));
         }
 
-        if (isAuthenticatedUser){
+        if (isAuthenticatedUser) {
             // allow this page to bypass the redirection protocol
-            if (excludeFromPage && isUserAdmin) return;
+            if (excludeFromPage && isUserAdmin)
+                return;
             beforEnterEvent.rerouteTo("error");
             return;
         }
     }
 
-    public void logOut(){
+    public void logOut() {
         UI.getCurrent().getPage().setLocation("/login");
         SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
         logoutHandler.logout(
-                VaadinServletRequest.getCurrent().getHttpServletRequest(),null,null
-        );
+                VaadinServletRequest.getCurrent().getHttpServletRequest(), null, null);
     }
-    
+
     /**
      * Call to get current authenticated user info
-     * @return Optional with current authenticated user, else empty 
+     * 
+     * @return Optional with current authenticated user, else empty
      */
     public UserDetails getAuthenticatedRequestSession() {
         return this.getSessionOptional().get();
     }
-    private Optional<UserDetails> getSessionOptional() {
+
+    public Optional<UserDetails> getSessionOptional() {
         return authContext.getAuthenticatedUser(UserDetails.class);
     }
 }

@@ -29,7 +29,7 @@ public class NavBar {
     SecurityViewService securityViewHandler;
     CustomUserDetailsService customUserDetailsService;
 
-    public NavBar(CustomUserDetailsService customUserDetailsService, SecurityViewService securityViewHandler){
+    public NavBar(CustomUserDetailsService customUserDetailsService, SecurityViewService securityViewHandler) {
         this.customUserDetailsService = customUserDetailsService;
         this.securityViewHandler = securityViewHandler;
     }
@@ -41,7 +41,7 @@ public class NavBar {
 
         routeTabs.add(new RouterLink("HOME", HomeView.class));
         routeTabs.add(new RouterLink("FRIENDS", FriendsView.class));
-        
+
         String sessionUsername = securityViewHandler.getAuthenticatedRequestSession().getUsername();
         // since logged in, no need to verify if this optional is empty
         String displayNameString = customUserDetailsService.getByUsername(sessionUsername).get().getDisplayName();
@@ -60,6 +60,9 @@ public class NavBar {
             securityViewHandler.logOut();
         });
 
+        Button exploreButton = new Button("Explore");
+        exploreButton.addClickListener(e -> exploreButton.getUI().ifPresent(ui -> ui.navigate("Explore")));
+
         ComboBox<String> languageComboBox = new ComboBox<>();
         languageComboBox.setPlaceholder("Music language");
         languageComboBox.setItems("English", "Punjabi", "Spanish", "French", "German", "Hindi");
@@ -72,7 +75,8 @@ public class NavBar {
         topNavButtons.getStyle().set("gap", "10px"); // Add spacing between the buttons
 
         // Create a layout for the header and buttons
-        HorizontalLayout topNavBar = new HorizontalLayout(header, searchField, languageComboBox, topNavButtons);
+        HorizontalLayout topNavBar = new HorizontalLayout(header, exploreButton, searchField, languageComboBox,
+                topNavButtons);
         topNavBar.setAlignItems(FlexComponent.Alignment.CENTER);
         topNavBar.setWidthFull();
         topNavBar.expand(header);
@@ -94,10 +98,10 @@ public class NavBar {
         public void add(RouterLink routerLink) {
             routerLink.setHighlightCondition(HighlightConditions.sameLocation());
             routerLink.setHighlightAction(
-                (link, shouldHighlight) -> {
-                    if (shouldHighlight) setSelectedTab(routerLinkTabMap.get(routerLink));
-                }
-            );
+                    (link, shouldHighlight) -> {
+                        if (shouldHighlight)
+                            setSelectedTab(routerLinkTabMap.get(routerLink));
+                    });
             routerLinkTabMap.put(routerLink, new Tab(routerLink));
             addThemeVariants(TabsVariant.LUMO_EQUAL_WIDTH_TABS);
             setWidthFull();

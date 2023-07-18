@@ -6,6 +6,9 @@ import java.util.Optional;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 //import com.vaadin.flow.component.Text;
 //import com.vaadin.flow.component.UI;
 //import com.vaadin.flow.component.button.Button;
@@ -18,6 +21,7 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 //import com.vaadin.flow.component.orderedlayout.FlexComponent;
 //import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
@@ -27,8 +31,8 @@ import com.vaadin.flow.router.Route;
 
 import jakarta.annotation.security.RolesAllowed;
 import se.michaelthelin.spotify.model_objects.specification.AlbumSimplified;
-import trackour.trackour.models.CustomUserDetailsService;
-import trackour.trackour.security.SecurityViewHandler;
+import trackour.trackour.model.CustomUserDetailsService;
+import trackour.trackour.security.SecurityViewService;
 import trackour.trackour.spotify.newReleases;
 
 @Route("")
@@ -40,54 +44,56 @@ public class HomeView extends VerticalLayout {
     MenuBar mobileVMenuBar;
     Component mobileView;
 
-    public HomeView(SecurityViewHandler securityViewHandler,
+    public HomeView(SecurityViewService securityViewHandler,
             CustomUserDetailsService customUserDetailsService) {
-        H1 header = new H1("Trackour");
+        // H1 header = new H1("Trackour");
 
-        Optional<UserDetails> username = securityViewHandler.getRequestSession();
-        String sessionUsername = username.get().getUsername();
-        String displayNameString = customUserDetailsService.getByUsername(sessionUsername).get().getDisplayName();
-        Text displayNameTxt = new Text("@" + displayNameString);
-        Button signUpButton = new Button("Sign Up");
-        signUpButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        signUpButton.addClassName("button-hover-effect");
-        signUpButton.addClickListener(event -> {
-            UI.getCurrent().navigate("signUp");
-        });
+        // Optional<UserDetails> username = securityViewHandler.getRequestSession();
+        // String sessionUsername = username.get().getUsername();
+        // String displayNameString =
+        // customUserDetailsService.getByUsername(sessionUsername).get().getDisplayName();
+        // Text displayNameTxt = new Text("@" + displayNameString);
+        // Button signUpButton = new Button("Sign Up");
+        // signUpButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        // signUpButton.addClassName("button-hover-effect");
+        // signUpButton.addClickListener(event -> {
+        // UI.getCurrent().navigate("signUp");
+        // });
 
-        Button LoginButton = new Button("Logout");
-        LoginButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        LoginButton.addClassName("button-hover-effect");
-        LoginButton.addClickListener(event -> {
-            securityViewHandler.logOut();
-        });
+        // Button LoginButton = new Button("Logout");
+        // LoginButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        // LoginButton.addClassName("button-hover-effect");
+        // LoginButton.addClickListener(event -> {
+        // securityViewHandler.logOut();
+        // });
 
-        ComboBox<String> languageComboBox = new ComboBox<>();
-        languageComboBox.setPlaceholder("Music language");
-        languageComboBox.setItems("English", "Punjabi", "Spanish", "French", "German", "Hindi");
+        // ComboBox<String> languageComboBox = new ComboBox<>();
+        // languageComboBox.setPlaceholder("Music language");
+        // languageComboBox.setItems("English", "Punjabi", "Spanish", "French",
+        // "German", "Hindi");
 
-        TextField searchField = new TextField();
-        searchField.setPlaceholder("Search Music");
-        searchField.setPrefixComponent(new Icon("lumo", "search"));
+        // TextField searchField = new TextField();
+        // searchField.setPlaceholder("Search Music");
+        // searchField.setPrefixComponent(new Icon("lumo", "search"));
 
-        Button mediaShelfButton = new Button("Media Shelf", new Icon(VaadinIcon.MUSIC));
-        Button exploreButton = new Button("Explore");
-        exploreButton.addClickListener(e -> exploreButton.getUI().ifPresent(ui -> ui.navigate("Explore")));
+        // Button mediaShelfButton = new Button("Media Shelf", new
+        // Icon(VaadinIcon.MUSIC));
 
-        HorizontalLayout topNavButtons = new HorizontalLayout(exploreButton, searchField, languageComboBox,
-                mediaShelfButton, displayNameTxt, LoginButton);
-        topNavButtons.addClassName("topNavButtons");
-        topNavButtons.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
-        topNavButtons.setWidthFull();
+        // HorizontalLayout topNavButtons = new HorizontalLayout(exploreButton,
+        // searchField, languageComboBox,
+        // mediaShelfButton, displayNameTxt, LoginButton);
+        // topNavButtons.addClassName("topNavButtons");
+        // topNavButtons.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+        // topNavButtons.setWidthFull();
 
-        HorizontalLayout topNavBar = new HorizontalLayout(header, topNavButtons);
+        // HorizontalLayout topNavBar = new HorizontalLayout(header, topNavButtons);
 
-        topNavBar.setAlignItems(FlexComponent.Alignment.CENTER);
-        topNavBar.setWidthFull();
-        topNavBar.expand(searchField);
-        topNavBar.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
-
-        add(topNavBar);
+        // topNavBar.setAlignItems(FlexComponent.Alignment.CENTER);
+        // topNavBar.setWidthFull();
+        // topNavBar.expand(searchField);
+        // topNavBar.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+        NavBar obj = new NavBar(customUserDetailsService, securityViewHandler);
+        add(obj.generateNavBar());
 
         H2 newRelease = new H2("New Releases");
         newRelease.getStyle().set("margin-left", "25px");
