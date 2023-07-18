@@ -64,7 +64,7 @@ public class clientCred {
 
     public static String getAccessToken() {
         clientCredentials_Async(); // Call the synchronous method to obtain the access token
-        System.out.println(spotifyApi.getAccessToken());
+        // System.out.println(spotifyApi.getAccessToken());
         return spotifyApi.getAccessToken();
     }
 

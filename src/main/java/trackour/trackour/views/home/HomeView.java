@@ -11,7 +11,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
@@ -23,17 +22,14 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouterLink;
 
 import jakarta.annotation.security.RolesAllowed;
 import se.michaelthelin.spotify.model_objects.specification.AlbumSimplified;
 import trackour.trackour.models.CustomUserDetailsService;
 import trackour.trackour.security.SecurityViewHandler;
 import trackour.trackour.spotify.newReleases;
-import trackour.trackour.views.explore.ExploreView;
 
 @Route("")
 // Admins are users but also have the "admin" special role so pages that can be
