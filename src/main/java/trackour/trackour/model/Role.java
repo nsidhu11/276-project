@@ -1,4 +1,4 @@
-package trackour.trackour.models;
+package trackour.trackour.model;
 
 public enum Role {
     ADMIN("ADMIN"),
@@ -11,7 +11,11 @@ public enum Role {
         this.value = value;
     }
 
-    public String getName() {
+    public String roleToString() {
         return this.value;
+    }
+
+    public String roleToRoleString() {
+        return "ROLE_" + this.value;
     }
 }
