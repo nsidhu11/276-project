@@ -5,9 +5,6 @@
 .project
 .classpath
 
-# This file is an enum class that holds the Spotify API Client ID and Secret
-ClientKeys.java
-
 *.iml
 .DS_Store
 
