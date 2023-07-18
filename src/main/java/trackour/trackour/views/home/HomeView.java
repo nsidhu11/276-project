@@ -26,12 +26,14 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLink;
 
 import jakarta.annotation.security.RolesAllowed;
 import se.michaelthelin.spotify.model_objects.specification.AlbumSimplified;
 import trackour.trackour.models.CustomUserDetailsService;
 import trackour.trackour.security.SecurityViewHandler;
 import trackour.trackour.spotify.newReleases;
+import trackour.trackour.views.explore.ExploreView;
 
 @Route("")
 // Admins are users but also have the "admin" special role so pages that can be
@@ -74,6 +76,7 @@ public class HomeView extends VerticalLayout {
 
         Button mediaShelfButton = new Button("Media Shelf", new Icon(VaadinIcon.MUSIC));
         Button exploreButton = new Button("Explore");
+        exploreButton.addClickListener(e -> exploreButton.getUI().ifPresent(ui -> ui.navigate("Explore")));
 
         HorizontalLayout topNavButtons = new HorizontalLayout(exploreButton, searchField, languageComboBox,
                 mediaShelfButton, displayNameTxt, LoginButton);
@@ -92,6 +95,7 @@ public class HomeView extends VerticalLayout {
 
         H2 newRelease = new H2("New Releases");
         newRelease.getStyle().set("margin-left", "25px");
+        newRelease.getStyle().set("margin-top", "25px");
         HorizontalLayout tLayout = new HorizontalLayout();
         List<AlbumSimplified> albums = newReleases.getNewReleases();
         Scroller trendinScroller = new Scroller();
@@ -102,23 +106,18 @@ public class HomeView extends VerticalLayout {
             coverImage.setHeight("200px");
             Icon playIcon = new Icon(VaadinIcon.PLAY_CIRCLE);
             playIcon.setColor("Green");
+            playIcon.setClassName("playicon");
 
             Button albumButton = new Button(coverImage);
             // albumButton.setIcon(playIcon);
             albumButton.getStyle().setWidth("200px");
             albumButton.getStyle().setHeight("200px");
-            albumButton.setId("albumB");
+            albumButton.addClassName("albumB");
             albumButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-
-            // albumButton.getElement().addEventListener("onmouseover", e -> {
-            // albumButton.setIcon(playIcon);
-            // });
-            albumButton.addClickListener(e -> {
-                // Handle button click event here
-            });
 
             Div albumInfo = new Div(new Text(album.getName()));
             albumInfo.setWidth("200px");
+
             VerticalLayout albumLayout = new VerticalLayout();
             albumLayout.add(albumButton, albumInfo);
 
@@ -127,18 +126,8 @@ public class HomeView extends VerticalLayout {
         trendinScroller.setContent(tLayout);
         add(newRelease, trendinScroller);
 
-        H2 trendingSongs = new H2("Trending Now");
-        HorizontalLayout newReleaseLayout = new HorizontalLayout();
-        trendingSongs.getStyle().set("margin-left", "25px");
-        newReleaseLayout.setPadding(true);
-        newReleaseLayout.getStyle().set("margin-left", "50px");
-        newReleaseLayout.add(new Button("Song 1"));
-        newReleaseLayout.add(new Button("Song 2"));
-        newReleaseLayout.add(new Button("Song 3"));
-
-        add(trendingSongs, newReleaseLayout);
-
         H2 utiliy = new H2("Audio Utility");
+        utiliy.getStyle().set("margin-left", "25px");
         add(utiliy);
     }
 }
