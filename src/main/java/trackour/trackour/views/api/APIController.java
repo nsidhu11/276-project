@@ -4,8 +4,6 @@ import java.io.IOException;
 
 import org.apache.hc.core5.http.ParseException;
 
-import com.neovisionaries.i18n.CountryCode;
-
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.enums.Modality;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
@@ -291,7 +289,7 @@ public class APIController {
         }
     }
 
-    // Get the name of the track
+    // Get the name of the track by the Spotify Track ID
     public static String getTrackName(String id) {
         try {
             final ClientCredentials clientCredentials = clientCredentialsRequest.execute();
@@ -310,7 +308,7 @@ public class APIController {
         }
     }
 
-    // Get the Album of the specified Track
+    // Get the Album of the specified Track by the Spotify Track ID
     public static AlbumSimplified getAlbum(String id) {
         try {
             final ClientCredentials clientCredentials = clientCredentialsRequest.execute();
@@ -369,7 +367,7 @@ public class APIController {
         }
     }
 
-    // Get an array of Album Cover images in different sizes of the specified Album ID
+    // Get an array of Album Cover images in different sizes by the Spotify Album ID
     public static Image[] getAlbumImage(String id) {
         try {
             final ClientCredentials clientCredentials = clientCredentialsRequest.execute();
@@ -402,6 +400,26 @@ public class APIController {
             final Track track = getTrackRequest.execute();
 
             return track.getArtists();
+
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    // Get an Album from the Spotify Track ID
+    public static AlbumSimplified getAlbumFromTrack(String id) {
+        try {
+            final ClientCredentials clientCredentials = clientCredentialsRequest.execute();
+
+            spotifyAPI.setAccessToken(clientCredentials.getAccessToken());
+
+            final GetTrackRequest getTrackRequest = spotifyAPI.getTrack(id)
+                .build();
+
+            final Track track = getTrackRequest.execute();
+
+            return track.getAlbum();
 
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println(e.getMessage());
@@ -459,23 +477,6 @@ public class APIController {
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println(e.getMessage());
             return null;
-        }
-    }
-
-    public static void main(String[] args) {
-        Paging<Track> test = searchTracks("Ain't No Way by denzel curry", 5);
-        Track[] tracks = test.getItems();
-
-        for (int i = 0; i < tracks.length; i++) {
-
-            ArtistSimplified[] artists = getArtistFromTrack(tracks[i].getId());
-            System.out.println(tracks[i].getName() + " by ");
-            
-            for (int j = 0; j < artists.length; j++) {
-                System.out.print(artists[j].getName() + ", ");
-            }
-
-            System.out.println();
         }
     }
 }
