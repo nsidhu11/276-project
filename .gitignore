@@ -20,5 +20,8 @@ drivers/
 error-screenshots/
 webpack.generated.js
 
+ResponseClass.java
+SaavnAPIExample.java
+
 # Spotify API Client Keys
 ClientKeys.java

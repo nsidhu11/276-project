@@ -9,8 +9,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
-import trackour.trackour.models.CustomUserDetailsService;
-import trackour.trackour.security.SecurityViewHandler;
+import trackour.trackour.model.CustomUserDetailsService;
+import trackour.trackour.security.SecurityViewService;
 
 @Route("signup")
 @PageTitle("SignUp")
@@ -18,14 +18,14 @@ import trackour.trackour.security.SecurityViewHandler;
 public class SignupPageView extends VerticalLayout implements BeforeLeaveObserver, BeforeEnterObserver  {
 
     @Autowired
-    SecurityViewHandler securityViewHandler;
+    SecurityViewService securityViewHandler;
 
     @Autowired
     CustomUserDetailsService userService;
     
     CustomSignupForm signupForm;
    
-    public SignupPageView(SecurityViewHandler securityViewHandler, CustomUserDetailsService userService) {
+    public SignupPageView(SecurityViewService securityViewHandler, CustomUserDetailsService userService) {
 
         this.signupForm = new CustomSignupForm(userService);
         
@@ -39,18 +39,8 @@ public class SignupPageView extends VerticalLayout implements BeforeLeaveObserve
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         // this method call reroutes get requests to this view if the current session is already authenticated
         this.securityViewHandler.handleAnonymousOnly(beforeEnterEvent, true);
-        if (beforeEnterEvent.getLocation()
-                .getQueryParameters()
-                .getParameters()
-                .containsKey("error")) {
-        }
     }
 
     @Override
-    public void beforeLeave(BeforeLeaveEvent event) {
-        // reroute to error page
-        if (event.hasUnknownReroute()){
-            System.out.println("Rerouting to Error Page!");
-        }
-    }
+    public void beforeLeave(BeforeLeaveEvent event) {}
 }

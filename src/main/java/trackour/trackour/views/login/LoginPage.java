@@ -1,11 +1,9 @@
 package trackour.trackour.views.login;
+
 import com.vaadin.flow.component.UI;
-//import com.vaadin.flow.component.button.Button;
-//import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-//import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.BeforeLeaveEvent;
@@ -14,8 +12,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-import trackour.trackour.security.SecurityViewHandler;
-// import trackour.trackour.views.signup.SignUpView;
+import trackour.trackour.security.SecurityViewService;
 import trackour.trackour.views.signup.SignupPageView;
 
 @Route("login")
@@ -24,12 +21,12 @@ import trackour.trackour.views.signup.SignupPageView;
 
 public class LoginPage extends VerticalLayout implements BeforeLeaveObserver, BeforeEnterObserver {
     
-    SecurityViewHandler securityViewHandler;
+    SecurityViewService securityViewHandler;
 
     private LoginForm login = new LoginForm();
 
     // inject view auth handler
-    public LoginPage(SecurityViewHandler securityViewHandler) {
+    public LoginPage(SecurityViewService securityViewHandler) {
         this.securityViewHandler = securityViewHandler;
 
         addClassName("login-view");
@@ -50,30 +47,6 @@ public class LoginPage extends VerticalLayout implements BeforeLeaveObserver, Be
 
         add(new H1("Trackour"), login, signUpLink);
     }
-
-    /*
-    Dialog handleForgotPasswordDialog() {
-        Dialog dialog = new Dialog();
-
-        VerticalLayout resetDialogLayout = new VerticalLayout();
-
-        EmailField dialogEmailField = new EmailField("Email");
-
-        dialog.setHeaderTitle("Forgot Password");
-        Button saveButton = new Button("Send");
-        Button cancelButton = new Button("Cancel", e -> dialog.close());
-
-        saveButton.addClickListener(clickEvent -> {
-            System.out.println(dialogEmailField.getValue());
-        });
-
-        resetDialogLayout.add(dialogEmailField);
-        dialog.add(resetDialogLayout);
-        dialog.getFooter().add(cancelButton);
-        dialog.getFooter().add(saveButton);
-        return dialog;
-    }
-    */
 
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {

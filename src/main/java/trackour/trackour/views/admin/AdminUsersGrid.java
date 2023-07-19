@@ -4,10 +4,9 @@ import java.util.List;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-
-import trackour.trackour.models.User;
-
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
+import trackour.trackour.model.User;
 
 public class AdminUsersGrid extends VerticalLayout {
 
