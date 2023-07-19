@@ -25,7 +25,7 @@ public class clientCred {
     private static final String clientId = ClientKeys.CLIENT_ID.getKey();
     private static final String clientSecret = ClientKeys.CLIENT_SECRET.getKey();
     private static Integer accessTokenExpiresIn = null;
-    private static final long TOKEN_LIFE_SPAN_MILLISECONDS = 3600 * 1000L;
+    private static final long TOKEN_LIFE_SPAN_MILLISECONDS = 2700 * 1000L;
 
     private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
             .setClientId(clientId)
