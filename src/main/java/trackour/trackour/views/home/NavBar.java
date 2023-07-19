@@ -9,6 +9,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -45,7 +47,7 @@ public class NavBar {
         String sessionUsername = securityViewHandler.getAuthenticatedRequestSession().getUsername();
         // since logged in, no need to verify if this optional is empty
         String displayNameString = customUserDetailsService.getByUsername(sessionUsername).get().getDisplayName();
-        Text displayNameTxt = new Text(displayNameString);
+        Text displayNameTxt = new Text("@" + displayNameString);
         Button signUpButton = new Button("Sign Up");
         signUpButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         signUpButton.addClassName("button-hover-effect");
@@ -69,16 +71,25 @@ public class NavBar {
 
         TextField searchField = new TextField();
         searchField.setPlaceholder("Search Any Music");
+        searchField.setPlaceholder("Search Music");
+        searchField.setPrefixComponent(new Icon("lumo", "search"));
 
+        Icon mediaIcon = new Icon(VaadinIcon.MUSIC);
+        Button mediaShelfButton = new Button("Media Shelf", mediaIcon);
         HorizontalLayout topNavButtons = new HorizontalLayout(displayNameTxt, LoginButton);
         topNavButtons.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         topNavButtons.getStyle().set("gap", "10px"); // Add spacing between the buttons
 
+        HorizontalLayout graphics = new HorizontalLayout();
+        graphics.add(header, exploreButton);
+        graphics.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+
         // Create a layout for the header and buttons
-        HorizontalLayout topNavBar = new HorizontalLayout(header, exploreButton, searchField, languageComboBox,
+        HorizontalLayout topNavBar = new HorizontalLayout(graphics, searchField, languageComboBox, mediaShelfButton,
                 topNavButtons);
         topNavBar.setAlignItems(FlexComponent.Alignment.CENTER);
         topNavBar.setWidthFull();
+        // topNavBar.expand(exploreButton);
         topNavBar.expand(header);
         topNavBar.expand(searchField);
         topNavBar.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
