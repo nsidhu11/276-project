@@ -92,6 +92,8 @@ public class HomeView extends VerticalLayout {
         // topNavBar.setWidthFull();
         // topNavBar.expand(searchField);
         // topNavBar.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+
+        
         NavBar obj = new NavBar(customUserDetailsService, securityViewHandler);
         add(obj.generateNavBar());
 
@@ -105,7 +107,8 @@ public class HomeView extends VerticalLayout {
         // set the width of the scroller area to 100% to not overflow over the side of the page
         trendinScroller.setWidthFull();
         trendinScroller.setScrollDirection(Scroller.ScrollDirection.HORIZONTAL);
-        for (AlbumSimplified album : albums) {
+        try {
+            for (AlbumSimplified album : albums) {
             Image coverImage = new Image(album.getImages()[0].getUrl(), "Album Cover");
             coverImage.setWidth("200px");
             coverImage.setHeight("200px");
@@ -127,6 +130,9 @@ public class HomeView extends VerticalLayout {
             albumLayout.add(albumButton, albumInfo);
 
             tLayout.add(albumLayout);
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         trendinScroller.setContent(tLayout);
         add(newRelease, trendinScroller);
