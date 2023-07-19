@@ -4,19 +4,22 @@ import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.credentials.ClientCredentials;
 import se.michaelthelin.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
+import trackour.trackour.views.api.ClientKeys;
+
 import org.apache.hc.core5.http.ParseException;
+// import org.springframework.boot.actuate.autoconfigure.metrics.MetricsProperties.Web.Client;
 
 import java.io.IOException;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
-import io.github.cdimascio.dotenv.Dotenv;
+// import io.github.cdimascio.dotenv.Dotenv;
 
 public class clientCred {
-    private static final Dotenv dotenv = Dotenv.configure().load();
-    private static final String clientId = dotenv.get("CLIENT_ID");
-    private static final String clientSecret = dotenv.get("CLIENT_SECRET");
+    // private static final Dotenv dotenv = Dotenv.configure().load();
+    private static final String clientId = ClientKeys.CLIENT_ID.getKey();
+    private static final String clientSecret = ClientKeys.CLIENT_SECRET.getKey();
 
     private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
             .setClientId(clientId)
@@ -72,7 +75,7 @@ public class clientCred {
 
     // }
 
-    // public static void main(String[] args) {
+    // public static void   (String[] args) {
     //     // clientCredentials_Sync();
     //     // clientCredentials_Async();
 
