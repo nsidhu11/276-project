@@ -72,13 +72,13 @@ public class clientCred {
 
     // }
 
-    public static void main(String[] args) {
-        // clientCredentials_Sync();
-        // clientCredentials_Async();
+    // public static void main(String[] args) {
+    //     // clientCredentials_Sync();
+    //     // clientCredentials_Async();
 
-        String accessToken = getAccessToken();
-        if (accessToken != null) {
-            System.out.println("Access Token: " + accessToken);
-        }
-    }
+    //     String accessToken = getAccessToken();
+    //     if (accessToken != null) {
+    //         System.out.println("Access Token: " + accessToken);
+    //     }
+    // }
 }

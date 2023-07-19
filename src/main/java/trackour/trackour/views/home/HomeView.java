@@ -101,6 +101,9 @@ public class HomeView extends VerticalLayout {
         HorizontalLayout tLayout = new HorizontalLayout();
         List<AlbumSimplified> albums = newReleases.getNewReleases();
         Scroller trendinScroller = new Scroller();
+
+        // set the width of the scroller area to 100% to not overflow over the side of the page
+        trendinScroller.setWidthFull();
         trendinScroller.setScrollDirection(Scroller.ScrollDirection.HORIZONTAL);
         for (AlbumSimplified album : albums) {
             Image coverImage = new Image(album.getImages()[0].getUrl(), "Album Cover");
