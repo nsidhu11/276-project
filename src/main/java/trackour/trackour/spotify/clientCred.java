@@ -119,7 +119,6 @@ public class clientCred {
     }
 
     // public static String getAuthorizationHeader(){
-
     // }
 
     // public static void   (String[] args) {
