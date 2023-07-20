@@ -35,6 +35,8 @@ public class ExploreView extends VerticalLayout {
     public ExploreView(SecurityViewService securityViewHandler,
             CustomUserDetailsService customUserDetailsService) {
 
+        Explore xplore = new Explore();
+
         Optional<UserDetails> username = securityViewHandler.getSessionOptional();
         String sessionUsername = username.get().getUsername();
         String displayNameString = customUserDetailsService.getByUsername(sessionUsername).get().getDisplayName();
@@ -51,7 +53,7 @@ public class ExploreView extends VerticalLayout {
         greetings.add(header, smileSpan);
 
         add(greetings);
-        List<Category> categories = Explore.getCategories();
+        List<Category> categories = xplore.getCategories();
 
         int columns = 5;
         VerticalLayout categoryLayout = new VerticalLayout();

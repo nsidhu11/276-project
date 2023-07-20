@@ -19,22 +19,34 @@ import java.util.concurrent.CompletionException;
 
 public class SearchTrack {
   
-  private final static ClientCred clientCred = new ClientCred();
-  private static final String accessToken = clientCred.getAccessToken();// "taHZ2SdB-bPA3FsK3D7ZN5npZS47cMy-IEySVEGttOhXmqaVAIo0ESvTCLjLBifhHOHOIuhFUKPW1WMDP7w6dj3MAZdWT8CLI2MkZaXbYLTeoDvXesf2eeiLYPBGdx8tIwQJKgV8XdnzH_DONk";
   static String q = NavBar.getSearchValue();
+  //          .market(CountryCode.SE)
+  //          .limit(10)
+  //          .offset(0)
+  //          .includeExternal("audio")
 
-  private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
-    .setAccessToken(accessToken)
-    .build();
-  private static SearchTracksRequest searchTracksRequest = spotifyApi.searchTracks(q)
-//          .market(CountryCode.SE)
-//          .limit(10)
-//          .offset(0)
-//          .includeExternal("audio")
-    .build();
+  private ClientCred clientCred;
+  private String accessToken;
+  private SpotifyApi spotifyApi;
+  private SearchTracksRequest searchTracksRequest;
 
-  public static void searchTracks_Sync() {
-      
+  public SearchTrack() {
+    initialize();
+  }
+
+  private void initialize() {
+    this.clientCred = new ClientCred();
+    if (clientCred.isAccessTokenExpired()){
+      this.accessToken = clientCred.getAccessToken();
+      this.spotifyApi = new SpotifyApi.Builder()
+              .setAccessToken(accessToken)
+              .build();
+      this.searchTracksRequest = spotifyApi.searchTracks(q).build();
+    }
+  }
+
+  public void searchTracks_Sync() {
+    initialize();
     try {
       final Paging<Track> trackPaging = searchTracksRequest.execute();
       System.out.println(searchTracksRequest.execute().getItems());
@@ -45,7 +57,8 @@ public class SearchTrack {
     }
   }
 
-  public static void searchTracks_Async() {
+  public void searchTracks_Async() {
+    initialize();
     try {
       final CompletableFuture<Paging<Track>> pagingFuture = searchTracksRequest.executeAsync();
 
@@ -62,7 +75,9 @@ public class SearchTrack {
     }
   }
 
- public static List<Track> getTrack() {
+ public List<Track> getTrack() {
+  
+  initialize();
 
     SearchTracksRequest tracksRequest = spotifyApi.searchTracks(NavBar.getSearchValue()).build();
 

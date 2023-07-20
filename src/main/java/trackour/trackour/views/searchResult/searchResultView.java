@@ -35,7 +35,7 @@ public class searchResultView extends VerticalLayout {
     public searchResultView(SecurityViewService securityViewHandler,
     CustomUserDetailsService customUserDetailsService) {
 
-
+        SearchTrack searchTracks = new SearchTrack();
         Optional<UserDetails> username = securityViewHandler.getSessionOptional();
         String sessionUsername = username.get().getUsername();
         String displayNameString = customUserDetailsService.getByUsername(sessionUsername).get().getDisplayName();
@@ -66,7 +66,7 @@ public class searchResultView extends VerticalLayout {
 
         add(headingLayout);
         
-        List<Track> tracks = SearchTrack.getTrack();
+        List<Track> tracks = searchTracks.getTrack();
         
          for (Track track : tracks) {
             long durationMin = track.getDurationMs()/60000;

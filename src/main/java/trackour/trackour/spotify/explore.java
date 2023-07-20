@@ -17,19 +17,32 @@ import java.util.List;
 
 public class Explore {
     
-    private final static ClientCred clientCred = new ClientCred();
-    private static final String accessToken = clientCred.getAccessToken();
-    private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
-            .setAccessToken(accessToken)
-            .build();
-    private static final GetListOfCategoriesRequest getListOfCategoriesRequest = spotifyApi.getListOfCategories()
-            // .country(CountryCode.SE)
-            .limit(50)
-            // .offset(0)
-            // .locale("sv_SE")
-            .build();
+    private ClientCred clientCred;
+    private String accessToken;
+    private SpotifyApi spotifyApi;
+    private GetListOfCategoriesRequest getListOfCategoriesRequest;
 
-    public static void getListOfCategories_Sync() {
+    public Explore() {
+        initialize();
+    }
+
+    private void initialize() {
+        this.clientCred = new ClientCred();
+        if (clientCred.isAccessTokenExpired()){
+            this.accessToken = clientCred.getAccessToken();
+            this.spotifyApi = new SpotifyApi.Builder()
+                    .setAccessToken(accessToken)
+                    .build();
+            this.getListOfCategoriesRequest = spotifyApi.getListOfCategories().build();
+                    // .country(CountryCode.SE)
+                    // .limit(10)
+                    // .offset(0)
+                    // .build();
+        }
+    }
+
+    public void getListOfCategories_Sync() {
+        initialize();
         try {
             final Paging<Category> categoryPaging = getListOfCategoriesRequest.execute();
 
@@ -39,7 +52,7 @@ public class Explore {
         }
     }
 
-    public static void getListOfCategories_Async() {
+    public void getListOfCategories_Async() {
         try {
             final CompletableFuture<Paging<Category>> pagingFuture = getListOfCategoriesRequest.executeAsync();
 
@@ -55,7 +68,7 @@ public class Explore {
         }
     }
 
-    public static List<Category> getCategories() {
+    public List<Category> getCategories() {
         final CompletableFuture<Paging<Category>> pagingFuture = getListOfCategoriesRequest.executeAsync();
         final Paging<Category> categoryPaging = pagingFuture.join();
         return Arrays.asList(categoryPaging.getItems());
