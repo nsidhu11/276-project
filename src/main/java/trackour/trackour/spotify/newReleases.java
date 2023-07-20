@@ -56,9 +56,6 @@ public class newReleases {
 
     public static List<AlbumSimplified> getNewReleases() {
 
-        // call before each call
-        clientCred.refreshAccessToken();
-
         final CompletableFuture<Paging<AlbumSimplified>> pagingFuture = getListOfNewReleasesRequest.executeAsync();
         final Paging<AlbumSimplified> albumSimplifiedPaging = pagingFuture.join();
 

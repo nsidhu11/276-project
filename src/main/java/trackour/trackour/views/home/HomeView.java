@@ -33,6 +33,7 @@ import jakarta.annotation.security.RolesAllowed;
 import se.michaelthelin.spotify.model_objects.specification.AlbumSimplified;
 import trackour.trackour.model.CustomUserDetailsService;
 import trackour.trackour.security.SecurityViewService;
+import trackour.trackour.spotify.clientCred;
 import trackour.trackour.spotify.newReleases;
 
 @Route("")
@@ -46,6 +47,8 @@ public class HomeView extends VerticalLayout {
 
     public HomeView(SecurityViewService securityViewHandler,
             CustomUserDetailsService customUserDetailsService) {
+
+        System.out.println("access token:" + clientCred.getAccessToken());
         // H1 header = new H1("Trackour");
 
         // Optional<UserDetails> username = securityViewHandler.getRequestSession();
