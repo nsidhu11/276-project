@@ -85,7 +85,7 @@ public class clientCred {
         // request object used to refresh the access token
         authorizationCodeRefreshRequest = spotifyApi.authorizationCodeRefresh().build();
         if (!isAccessTokenExpired()) {
-            System.out.println("Access token is still valid. Check the timer at './admin/view-users'");
+            System.out.println("Access token is still valid.");
             System.out.println("access token: " + spotifyApi.getAccessToken());
             return;
         }
