@@ -33,8 +33,8 @@ import jakarta.annotation.security.RolesAllowed;
 import se.michaelthelin.spotify.model_objects.specification.AlbumSimplified;
 import trackour.trackour.model.CustomUserDetailsService;
 import trackour.trackour.security.SecurityViewService;
-import trackour.trackour.spotify.clientCred;
-import trackour.trackour.spotify.newReleases;
+import trackour.trackour.spotify.ClientCred;
+import trackour.trackour.spotify.NewReleases;
 
 @Route("")
 // Admins are users but also have the "admin" special role so pages that can be
@@ -48,6 +48,7 @@ public class HomeView extends VerticalLayout {
     public HomeView(SecurityViewService securityViewHandler,
             CustomUserDetailsService customUserDetailsService) {
 
+        ClientCred clientCred = new ClientCred();
         System.out.println("access token:" + clientCred.getAccessToken());
         // H1 header = new H1("Trackour");
 
@@ -104,7 +105,7 @@ public class HomeView extends VerticalLayout {
         newRelease.getStyle().set("margin-left", "25px");
         newRelease.getStyle().set("margin-top", "25px");
         HorizontalLayout tLayout = new HorizontalLayout();
-        List<AlbumSimplified> albums = newReleases.getNewReleases();
+        List<AlbumSimplified> albums = NewReleases.getNewReleases();
         Scroller trendinScroller = new Scroller();
 
         // set the width of the scroller area to 100% to not overflow over the side of the page

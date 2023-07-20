@@ -15,9 +15,10 @@ import java.util.concurrent.CompletionException;
 import java.util.Arrays;
 import java.util.List;
 
-public class explore {
+public class Explore {
+    
+    private final static ClientCred clientCred = new ClientCred();
     private static final String accessToken = clientCred.getAccessToken();
-
     private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
             .setAccessToken(accessToken)
             .build();

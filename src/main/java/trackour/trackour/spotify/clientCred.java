@@ -17,22 +17,27 @@ import java.util.concurrent.CompletionException;
 
 // import io.github.cdimascio.dotenv.Dotenv;
 
-public class clientCred {
+public class ClientCred {
+    
     // private static final Dotenv dotenv = Dotenv.configure().load();
     private static final String clientId = ClientKeys.CLIENT_ID.getKey();
     private static final String clientSecret = ClientKeys.CLIENT_SECRET.getKey();
-
-    private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
-            .setClientId(clientId)
-            .setClientSecret(clientSecret)
-            .build();
+    private SpotifyApi spotifyApi;
+    
     // to refresh the access token
-    private static AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest;
+    private ClientCredentialsRequest clientCredentialsRequest;
+    private AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest;
 
-    private static final ClientCredentialsRequest clientCredentialsRequest = spotifyApi.clientCredentials()
-            .build();
-
-    public static void clientCredentials_Sync() {
+    public ClientCred() {
+        this.spotifyApi = new SpotifyApi.Builder()
+                .setClientId(clientId)
+                .setClientSecret(clientSecret)
+                .build();
+        this.clientCredentialsRequest = spotifyApi.clientCredentials().build();
+        this.authorizationCodeRefreshRequest = spotifyApi.authorizationCodeRefresh().build();
+    }
+ 
+    public void clientCredentials_Sync() {
         try {
             final ClientCredentials clientCredentials = clientCredentialsRequest.execute();
 
@@ -50,7 +55,7 @@ public class clientCred {
         }
     }
 
-    public static void clientCredentials_Async() {
+    public void clientCredentials_Async() {
         try {
             final CompletableFuture<ClientCredentials> clientCredentialsFuture = clientCredentialsRequest
                     .executeAsync();
@@ -72,18 +77,15 @@ public class clientCred {
         }
     }
     
-    public static Boolean isAccessTokenExpired() {
+    public Boolean isAccessTokenExpired() {
         final String refreshToken = spotifyApi.getRefreshToken();
         return !(refreshToken == null);
     }
 
     /**
-     * This private method is to be called always before the access token is requested method and before the request is made
+     * This private method is to be called always before the access token is requested and before the request is made to always have the updated access token
      */
-    private static void refreshAccessToken() {
-        
-        // request object used to refresh the access token
-        authorizationCodeRefreshRequest = spotifyApi.authorizationCodeRefresh().build();
+    private void refreshAccessToken() {
         if (!isAccessTokenExpired()) {
             System.out.println("Access token is still valid.");
             System.out.println("access token: " + spotifyApi.getAccessToken());
@@ -110,11 +112,12 @@ public class clientCred {
      * Call this method to get an updated version of the access token for any api call yoy make
      * @return
      */
-    public static String getAccessToken() {
+    public String getAccessToken() {
         // call before each call
-        clientCred.refreshAccessToken();
+        this.refreshAccessToken();
         clientCredentials_Async(); // Call the synchronous method to obtain the access token
         // System.out.println(spotifyApi.getAccessToken());
+        System.out.println("access tok:"+spotifyApi.getAccessToken());
         return spotifyApi.getAccessToken();
     }
     // public static void   (String[] args) {

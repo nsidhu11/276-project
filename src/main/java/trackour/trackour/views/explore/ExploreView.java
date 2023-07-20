@@ -23,7 +23,7 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 import se.michaelthelin.spotify.model_objects.specification.Category;
 
-import trackour.trackour.spotify.explore;
+import trackour.trackour.spotify.Explore;
 import trackour.trackour.model.CustomUserDetailsService;
 import trackour.trackour.security.SecurityViewService;
 
@@ -51,7 +51,7 @@ public class ExploreView extends VerticalLayout {
         greetings.add(header, smileSpan);
 
         add(greetings);
-        List<Category> categories = explore.getCategories();
+        List<Category> categories = Explore.getCategories();
 
         int columns = 5;
         VerticalLayout categoryLayout = new VerticalLayout();

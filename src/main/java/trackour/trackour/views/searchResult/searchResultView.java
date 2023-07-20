@@ -1,6 +1,6 @@
 package trackour.trackour.views.searchResult;
 import se.michaelthelin.spotify.model_objects.specification.Track;
-import trackour.trackour.spotify.searchTrack;
+import trackour.trackour.spotify.SearchTrack;
 
 
 import java.util.List;
@@ -66,7 +66,7 @@ public class searchResultView extends VerticalLayout {
 
         add(headingLayout);
         
-        List<Track> tracks = searchTrack.getTrack();
+        List<Track> tracks = SearchTrack.getTrack();
         
          for (Track track : tracks) {
             long durationMin = track.getDurationMs()/60000;

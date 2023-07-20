@@ -15,7 +15,8 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
-public class newReleases {
+public class NewReleases {
+    private final static ClientCred clientCred = new ClientCred();
     private static final String accessToken = clientCred.getAccessToken();
     private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
             .setAccessToken(accessToken)
