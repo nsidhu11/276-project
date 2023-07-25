@@ -78,7 +78,6 @@ public class NewReleases {
 
         return Arrays.asList(albumSimplifiedPaging.getItems());
     }
-
     // public static void main(String[] args) {
     // getNewReleases();
     // }

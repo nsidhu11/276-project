@@ -71,7 +71,6 @@ public class Explore {
         final Paging<Category> categoryPaging = pagingFuture.join();
         return Arrays.asList(categoryPaging.getItems());
     }
-
     // public static void main(String[] args) {
     // // getListOfCategories_Sync();
     // // getListOfCategories_Async();
