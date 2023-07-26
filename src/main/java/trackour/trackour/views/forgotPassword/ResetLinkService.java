@@ -1,5 +1,6 @@
 package trackour.trackour.views.forgotPassword;
 import java.util.Properties;
+
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.PasswordAuthentication;
@@ -39,7 +40,7 @@ public class ResetLinkService {
             System.out.println(resetUrl);
     }
 
-    public void sendEmail() {
+    public void sendEmail(String usrname) {
         final String username = senderUsername;
         final String password = senderPassword;
 
@@ -65,7 +66,7 @@ public class ResetLinkService {
                     InternetAddress.parse(recipientEmail)
             );
             message.setSubject("Reset Trackour Email");
-            message.setContent("<p>Your 24hr one-time reset link is " + "<a href=\"" +resetUrl+ "\">here</a></p>", "text/html");
+            message.setContent("<p>Hi "+usrname+", your 24hr one-time reset link is " + "<a href=\"" +resetUrl+ "\">here</a></p>", "text/html");
 
             Transport.send(message);
 

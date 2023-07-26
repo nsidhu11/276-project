@@ -1,33 +1,34 @@
 package trackour.trackour.spotify;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+
+import org.apache.hc.core5.http.ParseException;
 
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.model_objects.specification.Track;
 import se.michaelthelin.spotify.requests.data.search.simplified.SearchTracksRequest;
-import org.apache.hc.core5.http.ParseException;
-import trackour.trackour.views.home.NavBar;
-
-import java.io.IOException;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 
 public class SearchTrack {
-
-  static String q = NavBar.getSearchValue();
-  // .market(CountryCode.SE)
-  // .limit(10)
-  // .offset(0)
-  // .includeExternal("audio")
+  
+  // static String q = NavBar.getSearchValue();
+  //          .market(CountryCode.SE)
+  //          .limit(10)
+  //          .offset(0)
+  //          .includeExternal("audio")
 
   private ClientCred clientCred;
   private String accessToken;
   private SpotifyApi spotifyApi;
   private SearchTracksRequest searchTracksRequest;
+  private String searchQuery;
 
   public SearchTrack() {
     initialize();
@@ -36,17 +37,17 @@ public class SearchTrack {
   private void initialize() {
     this.clientCred = new ClientCred();
     this.accessToken = clientCred.getAccessToken();
+    this.searchQuery = "";
     this.spotifyApi = new SpotifyApi.Builder()
-        .setAccessToken(accessToken)
-        .build();
-    this.searchTracksRequest = spotifyApi.searchTracks(q).build();
-    // if (clientCred.isAccessTokenExpired()){
-    // }
+            .setAccessToken(accessToken)
+            .build();
+    this.searchTracksRequest = null;
   }
 
   public void searchTracks_Sync() {
     initialize();
     try {
+      searchTracksRequest = spotifyApi.searchTracks(this.searchQuery).build();
       final Paging<Track> trackPaging = searchTracksRequest.execute();
       System.out.println(searchTracksRequest.execute().getItems());
 
@@ -59,6 +60,7 @@ public class SearchTrack {
   public void searchTracks_Async() {
     initialize();
     try {
+      searchTracksRequest = spotifyApi.searchTracks(this.searchQuery).build();
       final CompletableFuture<Paging<Track>> pagingFuture = searchTracksRequest.executeAsync();
 
       // Thread free to do other tasks...
@@ -74,13 +76,14 @@ public class SearchTrack {
     }
   }
 
-  public List<Track> getTrack() {
+ public List<Track> getTrackList(String trackQueryString) {
+  
+  System.out.println("trackQueryString:" + trackQueryString);
+  initialize();
 
-    initialize();
+    SearchTracksRequest tracksRequest = spotifyApi.searchTracks(trackQueryString).build();
 
-    SearchTracksRequest tracksRequest = spotifyApi.searchTracks(NavBar.getSearchValue()).build();
-
-    List<Track> songs = null;
+    List<Track> songs = new ArrayList<>();
 
     try {
       final Paging<Track> trackPaging = tracksRequest.execute();
@@ -90,6 +93,6 @@ public class SearchTrack {
     } catch (IOException | SpotifyWebApiException | ParseException e) {
       System.out.println("Error: " + e.getMessage());
     }
-    return songs;
-  }
+        return songs;
+    }
 }

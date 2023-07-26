@@ -36,8 +36,6 @@ public class NewReleases {
                 // .limit(10)
                 // .offset(0)
                 .build();
-        // if (clientCred.isAccessTokenExpired()){
-        // }
     }
     public void getListOfNewReleases_Sync() {
         initialize();
@@ -78,6 +76,7 @@ public class NewReleases {
 
         return Arrays.asList(albumSimplifiedPaging.getItems());
     }
+
     // public static void main(String[] args) {
     // getNewReleases();
     // }

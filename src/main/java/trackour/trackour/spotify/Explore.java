@@ -5,7 +5,9 @@ import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.specification.Category;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.requests.data.browse.GetListOfCategoriesRequest;
+
 import org.apache.hc.core5.http.ParseException;
+
 import java.io.IOException;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
@@ -14,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Explore {
-
+    
     private ClientCred clientCred;
     private String accessToken;
     private SpotifyApi spotifyApi;
@@ -31,12 +33,10 @@ public class Explore {
                 .setAccessToken(accessToken)
                 .build();
         this.getListOfCategoriesRequest = spotifyApi.getListOfCategories().build();
-        // .country(CountryCode.SE)
-        // .limit(10)
-        // .offset(0)
-        // .build();
-        // if (clientCred.isAccessTokenExpired()){
-        // }
+                // .country(CountryCode.SE)
+                // .limit(10)
+                // .offset(0)
+                // .build();
     }
 
     public void getListOfCategories_Sync() {
@@ -71,6 +71,7 @@ public class Explore {
         final Paging<Category> categoryPaging = pagingFuture.join();
         return Arrays.asList(categoryPaging.getItems());
     }
+
     // public static void main(String[] args) {
     // // getListOfCategories_Sync();
     // // getListOfCategories_Async();
