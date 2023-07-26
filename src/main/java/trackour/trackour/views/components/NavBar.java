@@ -249,23 +249,6 @@ public class NavBar extends MyBlockResponsiveLayout {
         return routeTabsArea;
     }
 
-    // helper method to return a tabs component with a given orientation, theme variants an array of tab objects
-    private Tabs createTabs(
-        Tabs.Orientation orientation, 
-        TabsVariant[] variantsArray, 
-        Tab... tabsArray) {
-        // init tabs object
-        Tabs tabsComponent = new Tabs();
-        // set orientation
-        tabsComponent.setOrientation(orientation);
-        // add theme variants
-        tabsComponent.addThemeVariants(variantsArray);
-        // add all tab objects
-        tabsComponent.add(tabsArray);
-        // Return the tabs
-        return tabsComponent;
-    }
-
     private HorizontalLayout generateLogo() {
         // Create a horizontal layout for the logo element
         HorizontalLayout logoArea = new HorizontalLayout();
@@ -365,20 +348,20 @@ public class NavBar extends MyBlockResponsiveLayout {
         this.hideComponent(drawerToggle, BROWSER_WIDTH_THRESHOLD, true);
         System.out.println("nav browserWidth: " + browserWidth);
         // Toggle the visibility of the drawer toggle and navbar tabs layout elements based on the browser width
-        // if (browserWidth < BROWSER_WIDTH_THRESHOLD) { // Use the constant instead of the magic number
-        //     System.out.println("in mobile view");
-        //     drawerToggle.setVisible(true);
-        //     navbarTabsLayout.setVisible(false);
-        //     // hideComponent(navbarTabsLayout, BROWSER_WIDTH_THRESHOLD);
-        //     // hideComponent(drawerToggle, BROWSER_WIDTH_THRESHOLD);
+        if (browserWidth < BROWSER_WIDTH_THRESHOLD) { // Use the constant instead of the magic number
+            System.out.println("in mobile view");
+            drawerToggle.setVisible(true);
+            navbarTabsLayout.setVisible(false);
+            // hideComponent(navbarTabsLayout, BROWSER_WIDTH_THRESHOLD);
+            // hideComponent(drawerToggle, BROWSER_WIDTH_THRESHOLD);
             
-        // } else {
-        //     System.out.println("in win view");
-        //     drawerToggle.setVisible(false);
-        //     navbarTabsLayout.setVisible(true);
-        //     if (appLayout.isDrawerOpened()) {
-        //         appLayout.setDrawerOpened(false);
-        //     }
-        // }
+        } else {
+            System.out.println("in win view");
+            drawerToggle.setVisible(false);
+            navbarTabsLayout.setVisible(true);
+            if (appLayout.isDrawerOpened()) {
+                appLayout.setDrawerOpened(false);
+            }
+        }
     }
 }
