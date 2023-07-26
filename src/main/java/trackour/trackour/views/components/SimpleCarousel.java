@@ -3,6 +3,7 @@ package trackour.trackour.views.components;
 import java.util.List;
 
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -26,6 +27,7 @@ public class SimpleCarousel extends HorizontalLayout {
     List<AlbumSimplified> itemsList;
     public SimpleCarousel(List<AlbumSimplified> itemsList) {
         this.thisScroller = new Scroller();
+        thisScroller.setMinWidth(300, Unit.PIXELS);
         this.scrollLeftValue = 0.0;
         this.scrollTopValue = 0.0;
         this.itemsList = itemsList;
@@ -116,8 +118,12 @@ public class SimpleCarousel extends HorizontalLayout {
             // Call the scrollLeft function from the JavaScript file
             leftCarouselButton.getElement().executeJs(
                 "function scrollL() {"+
-                "    const element = document.getElementById('my-scroller-horizontal');"+
-                "    element.scrollLeft -= element.offsetWidth;"+
+                "   const element = document.getElementById('my-scroller-horizontal');"+
+                "   if (element.offsetWidth <= 300) {"+
+                "   element.scrollLeft -= 300;"+
+                "   return;"+
+                "}"+
+                "   element.scrollLeft -= element.offsetWidth;"+
                 "}"+
                 "scrollL();"
             );
@@ -129,8 +135,12 @@ public class SimpleCarousel extends HorizontalLayout {
             // Call the scrollRight function from the JavaScript file
             rightCarouselButton.getElement().executeJs(
                 "function scrollR() {"+
-                "    const element = document.getElementById('my-scroller-horizontal');"+
-                "    element.scrollLeft += element.offsetWidth;"+
+                "   const element = document.getElementById('my-scroller-horizontal');"+
+                "   if (element.offsetWidth <= 300) {"+
+                "   element.scrollLeft += 300;"+
+                "   return;"+
+                "   }"+
+                "   element.scrollLeft += element.offsetWidth;"+
                 "}"+
                 "scrollR();"
             );
@@ -146,10 +156,3 @@ public class SimpleCarousel extends HorizontalLayout {
         return carouselContainer;
     }
 }
-
-/**
- * 
-                Icon playIcon = new Icon(VaadinIcon.PLAY_CIRCLE);
-                playIcon.setColor("Green");
-                playIcon.setClassName("playicon");
- */
