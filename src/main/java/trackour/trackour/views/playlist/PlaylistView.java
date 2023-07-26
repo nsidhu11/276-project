@@ -23,17 +23,29 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 import se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified;
+import trackour.trackour.model.CustomUserDetailsService;
+import trackour.trackour.security.SecurityViewService;
 import trackour.trackour.spotify.Playlist;
+import trackour.trackour.views.components.NavBar;
 
 @Route(value = "Playlists")
 @PageTitle("Playlists")
 @AnonymousAllowed
 public class PlaylistView extends Div implements HasUrlParameter<String> {
+    
+    VerticalLayout contentContainer;
+    public PlaylistView(SecurityViewService securityViewService,
+    CustomUserDetailsService customUserDetailsService) {
+        NavBar navbar = new NavBar(customUserDetailsService, securityViewService);
+        contentContainer = new VerticalLayout();
+        navbar.setContent(contentContainer);
+        add(navbar);
+    }
     @Override
     public void setParameter(BeforeEvent event, String parameter) {
         Playlist p = new Playlist(parameter);
         H1 header = new H1(new Text("Discover !!"));
-        add(header);
+        contentContainer.add(header);
         List<PlaylistSimplified> playlists = p.getPlaylists();
         VerticalLayout playlistLayout = new VerticalLayout();
         playlistLayout.setWidth("100%");
@@ -82,6 +94,6 @@ public class PlaylistView extends Div implements HasUrlParameter<String> {
         if (rowLayout.getComponentCount() > 0) {
             playlistLayout.add(rowLayout);
         }
-        add(playlistLayout);
+        contentContainer.add(playlistLayout);
     }
 }

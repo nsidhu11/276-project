@@ -39,6 +39,8 @@ import trackour.trackour.views.components.responsive.MyBlockResponsiveLayout;
 @RolesAllowed({"USER", "ADMIN"})
 
 public class ExploreView extends MyBlockResponsiveLayout {
+
+    private final String CATEGORY_CARD_SIZE = "12.5rem";
     public ExploreView(SecurityViewService securityViewHandler,
     CustomUserDetailsService customUserDetailsService) {
         
@@ -73,22 +75,20 @@ public class ExploreView extends MyBlockResponsiveLayout {
         categoryLayout.setAlignItems(FlexLayout.Alignment.CENTER);
         categoryLayout.setJustifyContentMode(FlexLayout.JustifyContentMode.CENTER);
         // categoryLayout.getStyle().setBackground("cyan");
-
-        String categoryCardSize = "8.5rem";
         
         try {
             for (Category category : categories) {
                 Image coverImage = new Image(category.getIcons()[0].getUrl(), "Category Cover");
-                coverImage.setWidth(categoryCardSize);
-                coverImage.setHeight(categoryCardSize);
+                coverImage.setWidth(CATEGORY_CARD_SIZE);
+                coverImage.setHeight(CATEGORY_CARD_SIZE);
                 
                 Button catButton = new Button(coverImage);
-                catButton.getStyle().setWidth(categoryCardSize);
-                catButton.getStyle().setHeight(categoryCardSize);
+                catButton.getStyle().setWidth(CATEGORY_CARD_SIZE);
+                catButton.getStyle().setHeight(CATEGORY_CARD_SIZE);
                 catButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
                 
                 Div categoryInfo = new Div(new Text(category.getName()));
-                categoryInfo.setWidth(categoryCardSize);
+                categoryInfo.setWidth(CATEGORY_CARD_SIZE);
                 
                 VerticalLayout catLayout = new VerticalLayout();
                 catLayout.add(catButton, categoryInfo);

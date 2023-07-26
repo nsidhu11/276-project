@@ -17,12 +17,24 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 import se.michaelthelin.spotify.model_objects.IPlaylistItem;
 import se.michaelthelin.spotify.model_objects.specification.PlaylistTrack;
+import trackour.trackour.model.CustomUserDetailsService;
+import trackour.trackour.security.SecurityViewService;
 import trackour.trackour.spotify.PlaylistsItems;
+import trackour.trackour.views.components.NavBar;
 
 @Route(value = "PlaylistItems")
 @PageTitle("Playlists")
 @AnonymousAllowed
 public class PlaylistItemsView extends Div implements HasUrlParameter<String> {
+
+    VerticalLayout contentContainer;
+    public PlaylistItemsView(SecurityViewService securityViewService,
+    CustomUserDetailsService customUserDetailsService) {
+        NavBar navbar = new NavBar(customUserDetailsService, securityViewService);
+        contentContainer = new VerticalLayout();
+        navbar.setContent(contentContainer);
+        add(navbar);
+    }
     @Override
     public void setParameter(BeforeEvent event, String parameter) {
         // setText(String.format("Hello, %s!", parameter));
@@ -44,6 +56,6 @@ public class PlaylistItemsView extends Div implements HasUrlParameter<String> {
             trackList.add(tracks);
             trackView.add(trackList);
         }
-        add(trackView);
+        contentContainer.add(trackView);
     }
 }
