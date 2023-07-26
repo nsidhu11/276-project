@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Explore {
-    
+
     private ClientCred clientCred;
     private String accessToken;
     private SpotifyApi spotifyApi;
@@ -30,11 +30,11 @@ public class Explore {
         this.spotifyApi = new SpotifyApi.Builder()
                 .setAccessToken(accessToken)
                 .build();
-        this.getListOfCategoriesRequest = spotifyApi.getListOfCategories().build();
-                // .country(CountryCode.SE)
-                // .limit(10)
-                // .offset(0)
-                // .build();
+        this.getListOfCategoriesRequest = spotifyApi.getListOfCategories().limit(50).build();
+        // .country(CountryCode.SE)
+        // .limit(10)
+        // .offset(0)
+        // .build();
         // if (clientCred.isAccessTokenExpired()){
         // }
     }
@@ -71,6 +71,13 @@ public class Explore {
         final Paging<Category> categoryPaging = pagingFuture.join();
         return Arrays.asList(categoryPaging.getItems());
     }
+
+    // public String getID(){
+    // List<Category> categories = getCategories();
+    // for (Category category : categories){
+    // return category.getId();
+    // }
+    // }
 
     // public static void main(String[] args) {
     // // getListOfCategories_Sync();

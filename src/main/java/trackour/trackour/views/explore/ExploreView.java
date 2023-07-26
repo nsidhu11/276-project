@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
@@ -74,6 +75,14 @@ public class ExploreView extends VerticalLayout {
             catButton.getStyle().setHeight("200px");
             catButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
+            catButton.addClickListener(event -> {
+
+                System.out
+                        .println("Button clicked for category: " + category.getName() + " with ID " + category.getId());
+                UI.getCurrent().navigate("Playlists/" + category.getId());
+
+            });
+
             Div categoryInfo = new Div(new Text(category.getName()));
             categoryInfo.setWidth("200px");
 
@@ -95,4 +104,5 @@ public class ExploreView extends VerticalLayout {
         }
         add(categoryLayout);
     }
+
 }
