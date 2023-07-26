@@ -19,13 +19,27 @@ import com.vaadin.flow.component.html.HtmlObject;
 
 import se.michaelthelin.spotify.model_objects.IPlaylistItem;
 import se.michaelthelin.spotify.model_objects.specification.PlaylistTrack;
+import trackour.trackour.model.CustomUserDetailsService;
+import trackour.trackour.security.SecurityViewService;
 import se.michaelthelin.spotify.model_objects.specification.Track;
 import trackour.trackour.spotify.PlaylistsItems;
+import trackour.trackour.views.components.NavBar;
 
 @Route(value = "PlaylistItems")
 @PageTitle("Playlists")
 @AnonymousAllowed
 public class PlaylistItemsView extends Div implements HasUrlParameter<String> {
+
+    VerticalLayout contentContainer;
+
+    public PlaylistItemsView(SecurityViewService securityViewService,
+            CustomUserDetailsService customUserDetailsService) {
+        NavBar navbar = new NavBar(customUserDetailsService, securityViewService);
+        contentContainer = new VerticalLayout();
+        navbar.setContent(contentContainer);
+        add(navbar);
+    }
+
     @Override
     public void setParameter(BeforeEvent event, String parameter) {
         // setText(String.format("Hello, %s!", parameter));
@@ -69,16 +83,6 @@ public class PlaylistItemsView extends Div implements HasUrlParameter<String> {
             trackList.add(trackLayout);
             trackView.add(trackList);
         }
-        add(trackView);
-        // HtmlObject audioPlayer = new HtmlObject("audio");
-        // audioPlayer.getElement().setAttribute("autoplay", true);
-        // audioPlayer.getElement().setAttribute("controls", true);
-
-        // // Get the URL of the track you want to play
-        // String trackUrl = "https://example.com/path/to/your/track.mp3";
-        // audioPlayer.getElement().setAttribute("src", trackUrl);
-
-        // // Add the audio player to your layout
-        // add(trackView, audioPlayer);
+        contentContainer.add(trackView);
     }
 }
