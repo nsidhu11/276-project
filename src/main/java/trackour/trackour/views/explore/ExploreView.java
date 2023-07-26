@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
@@ -93,6 +94,14 @@ public class ExploreView extends MyBlockResponsiveLayout {
                 catLayout.add(catButton, categoryInfo);
                 catLayout.getStyle().setWidth("auto");
                 catLayout.getStyle().setHeight("auto");
+
+                catButton.addClickListener(event -> {
+                    System.out
+                    .println("Button clicked for category: " + category.getName() + " with ID " + category.getId());
+                    UI.getCurrent().navigate("Playlists/" + category.getId());
+                
+                });
+
                 
                 // if (counter % columns == 0 && counter > 0) {
                 //     categoryLayout.add(rowLayout);
