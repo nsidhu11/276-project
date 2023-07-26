@@ -31,8 +31,8 @@ import trackour.trackour.security.SecurityViewService;
 
 @AnonymousAllowed
 
-public class searchResultView extends VerticalLayout {
-    public searchResultView(SecurityViewService securityViewHandler,
+public class SearchResultView extends VerticalLayout {
+    public SearchResultView(SecurityViewService securityViewHandler,
     CustomUserDetailsService customUserDetailsService) {
 
         SearchTrack searchTracks = new SearchTrack();
