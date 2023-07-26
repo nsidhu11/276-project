@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Explore {
-    
+
     private ClientCred clientCred;
     private String accessToken;
     private SpotifyApi spotifyApi;
@@ -32,11 +32,11 @@ public class Explore {
         this.spotifyApi = new SpotifyApi.Builder()
                 .setAccessToken(accessToken)
                 .build();
-        this.getListOfCategoriesRequest = spotifyApi.getListOfCategories().build();
-                // .country(CountryCode.SE)
-                // .limit(10)
-                // .offset(0)
-                // .build();
+        this.getListOfCategoriesRequest = spotifyApi.getListOfCategories().limit(50).build();
+        // .country(CountryCode.SE)
+        // .limit(10)
+        // .offset(0)
+        // .build();
     }
 
     public void getListOfCategories_Sync() {
