@@ -14,6 +14,7 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEvent;
@@ -25,7 +26,6 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 import se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified;
 import trackour.trackour.model.CustomUserDetailsService;
 import trackour.trackour.security.SecurityViewService;
-import trackour.trackour.spotify.Explore;
 import trackour.trackour.spotify.Playlist;
 import trackour.trackour.views.components.NavBar;
 
@@ -33,6 +33,8 @@ import trackour.trackour.views.components.NavBar;
 @PageTitle("Playlist Page | Trackour")
 @AnonymousAllowed
 public class PlaylistView extends Div implements HasUrlParameter<String> {
+
+    private final String PLAYLIST_CARD_SIZE = "12.5rem"; // equal to 200px
     
     VerticalLayout contentContainer;
     public PlaylistView(SecurityViewService securityViewService,
@@ -44,38 +46,25 @@ public class PlaylistView extends Div implements HasUrlParameter<String> {
     }
     @Override
     public void setParameter(BeforeEvent event, String parameter) {
-        String catId = parameter;
-        Explore catExplore = new Explore();
-        if (catId == null) {
-            UI.getCurrent().getPage().setTitle("Playlist | Trackour");
-        }
-        else {
-            catExplore.getCategories().forEach(cat -> {
-                if (cat.getId() != null && cat.getId().equals(catId)) {
-                    if (cat.getName() != null){
-                        UI.getCurrent().getPage().setTitle("Trackour - Playlist - " + cat.getName());
-                    }
-                    else {
-                        UI.getCurrent().getPage().setTitle("Playlist | Trackour");
-                    }
-                }
-            });
-        }
+
         Playlist p = new Playlist(parameter);
         H1 header = new H1(new Text("Discover !!"));
         contentContainer.add(header);
         List<PlaylistSimplified> playlists = p.getPlaylists();
-        VerticalLayout playlistLayout = new VerticalLayout();
-        playlistLayout.setWidth("100%");
+
+        FlexLayout playlistLayout = new FlexLayout();
+        playlistLayout.setFlexGrow(1);
+        playlistLayout.getStyle().set("display", "flex");
+        playlistLayout.getStyle().set("flex-wrap", "wrap");
+        playlistLayout.setAlignItems(FlexLayout.Alignment.CENTER);
+        playlistLayout.setJustifyContentMode(FlexLayout.JustifyContentMode.CENTER);
+        
         HorizontalLayout rowLayout = new HorizontalLayout();
-        rowLayout.setWidth("100%");
-        int counter = 0;
-        int columns = 5;
         for (PlaylistSimplified playlist : playlists) {
             try {
                 Image playListImage = new Image(playlist.getImages()[0].getUrl(), "Category Cover");
-                playListImage.setWidth("200px");
-                playListImage.setHeight("200px");
+                playListImage.setWidth(PLAYLIST_CARD_SIZE);
+                playListImage.setHeight(PLAYLIST_CARD_SIZE);
 
                 // PlaylistTracksInformation trackInfo = playlist.getTracks();
                 String playListID = playlist.getId();
@@ -87,30 +76,20 @@ public class PlaylistView extends Div implements HasUrlParameter<String> {
                         UI.getCurrent().navigate("PlaylistItems/" + playlist.getId());
                     }
                 });
-                playListButton.getStyle().setWidth("200px");
-                playListButton.getStyle().setHeight("200px");
+
+                playListButton.getStyle().setWidth(PLAYLIST_CARD_SIZE);
+                playListButton.getStyle().setHeight(PLAYLIST_CARD_SIZE);
                 playListButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
                 Div playListName = new Div(new H2(new Text(playlist.getName())));
-                playListName.setWidth("200px");
+                playListName.setWidth(PLAYLIST_CARD_SIZE);
                 VerticalLayout catLayout = new VerticalLayout();
                 catLayout.add(playListButton, playListName);
-                if (counter % columns == 0 && counter > 0) {
-                    playlistLayout.add(rowLayout);
-                    rowLayout = new HorizontalLayout();
-                    rowLayout.setWidth("100%");
-                }
-
+                rowLayout = new HorizontalLayout();
                 rowLayout.add(catLayout);
-                counter++;
-
+                playlistLayout.add(rowLayout);
             } catch (Exception e) {
-                // TODO: handle exception
             }
-
-        }
-        if (rowLayout.getComponentCount() > 0) {
-            playlistLayout.add(rowLayout);
         }
         contentContainer.add(playlistLayout);
     }
