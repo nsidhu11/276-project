@@ -22,7 +22,7 @@ import trackour.trackour.views.components.responsive.MyBlockResponsiveLayout;
 
 @Route(value = "profile")
 @RouteAlias(value = "user")
-@PageTitle("Profile")
+@PageTitle("Profile Page | Trackour")
 @PermitAll
 public class ProfilePageView extends MyBlockResponsiveLayout {
 

@@ -11,6 +11,7 @@ import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
@@ -25,6 +26,7 @@ import trackour.trackour.views.components.NavBar;
 @Route("admin/view-users")
 @RouteAlias("view-users")
 @PreserveOnRefresh
+@PageTitle("Admin Page | Trackour")
 // Admins are users but also have the "admin" special role so pages that can be
 // viewed by
 // both users and admins should have the admin role specified as well

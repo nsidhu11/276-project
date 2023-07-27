@@ -1,6 +1,7 @@
 package trackour.trackour.views.home;
 
 import java.util.List;
+import java.util.Map;
 
 // import java.util.Optional;
 // import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +27,7 @@ import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.PreserveOnRefresh;
+import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 
@@ -71,6 +73,16 @@ public class HomeView extends VerticalLayout {
     private VerticalLayout initContent() {
         VerticalLayout content = new VerticalLayout();
         SimpleSearchField simpleSearch = new SimpleSearchField();
+        // attach enter key listener
+        simpleSearch.onEnterKeyUp(event -> {
+            // get the current value of the search field
+            String searchValue = simpleSearch.getSearchValue();
+            // navigate to the search view with the search query as a query parameter
+            getUI().ifPresent(ui -> {
+                QueryParameters queryParameters = QueryParameters.simple(Map.of("query", searchValue));
+                ui.navigate("search", queryParameters);
+            });
+        });
 
         H2 newRelease = new H2("New Releases");
         newRelease.getStyle().set("margin-left", "25px");

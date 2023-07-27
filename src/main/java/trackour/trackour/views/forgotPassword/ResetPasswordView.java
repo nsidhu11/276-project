@@ -25,7 +25,7 @@ import trackour.trackour.security.SecurityViewService;
 
 @Route(value = "resetPassword")
 @RouteAlias("new-password")
-@PageTitle("Set New Password | Trackour")
+@PageTitle("Forgot Password - Reset Password | Trackour")
 @AnonymousAllowed
 public class ResetPasswordView extends VerticalLayout implements BeforeLeaveObserver, BeforeEnterObserver, HasUrlParameter<String> {
 

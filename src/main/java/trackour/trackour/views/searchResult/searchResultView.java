@@ -37,7 +37,7 @@ import trackour.trackour.views.login.LoginPage;
 
 @Route("searchResult")
 @RouteAlias("search")
-@PageTitle("Search Result")
+@PageTitle("Search Result | Trackour")
 @PreserveOnRefresh
 @PermitAll
 public class SearchResultView extends VerticalLayout implements BeforeEnterObserver {
@@ -52,7 +52,6 @@ public class SearchResultView extends VerticalLayout implements BeforeEnterObser
     NavBar navigation;
     PaginatedGrid<Track, Component> grid;
     VerticalLayout container;
-    
     public SearchResultView(SecurityViewService securityViewHandler,
     CustomUserDetailsService customUserDetailsService) {
         this.grid =  new PaginatedGrid<>();
@@ -60,7 +59,16 @@ public class SearchResultView extends VerticalLayout implements BeforeEnterObser
         this.securityViewHandler = securityViewHandler;
         this.customUserDetailsService = customUserDetailsService;
         simpleSearch = new SimpleSearchField();
-        // simpleSearch.onEnterKeyUp(event -> this.searchSubmit(event));
+        // attach enter key listener
+        simpleSearch.onEnterKeyUp(event -> {
+            // get the current value of the search field
+            String searchValue = simpleSearch.getSearchValue();
+            // navigate to the search view with the search query as a query parameter
+            getUI().ifPresent(ui -> {
+                QueryParameters queryParameters = QueryParameters.simple(Map.of("query", searchValue));
+                ui.getPage().setLocation("search?"+ queryParameters.getQueryString());
+            });
+        });
         this.navigation = new NavBar(customUserDetailsService, securityViewHandler);
     }
     

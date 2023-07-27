@@ -1,6 +1,4 @@
 package trackour.trackour.views.components;
-import java.util.Map;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
@@ -10,7 +8,6 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.QueryParameters;
 
 import trackour.trackour.views.searchResult.SearchResultView;
 
@@ -34,16 +31,6 @@ public class SimpleSearchField extends HorizontalLayout {
         this.setWidthFull();
         // simpleSearchComponent.getStyle().set("background-color", "red");
         generateSearchField();
-        // add a key up listener to the search field
-        searchField.addKeyUpListener(Key.ENTER, event -> {
-        // get the current value of the search field
-        String searchValue = searchField.getValue();
-        // navigate to the search view with the search query as a query parameter
-        getUI().ifPresent(ui -> {
-            QueryParameters queryParameters = QueryParameters.simple(Map.of("query", searchValue));
-            ui.navigate("search", queryParameters);
-        });
-        });
         this.add(this.searchField);
     }
 

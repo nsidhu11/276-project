@@ -25,11 +25,12 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 import se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified;
 import trackour.trackour.model.CustomUserDetailsService;
 import trackour.trackour.security.SecurityViewService;
+import trackour.trackour.spotify.Explore;
 import trackour.trackour.spotify.Playlist;
 import trackour.trackour.views.components.NavBar;
 
 @Route(value = "Playlists")
-@PageTitle("Playlists")
+@PageTitle("Playlist Page | Trackour")
 @AnonymousAllowed
 public class PlaylistView extends Div implements HasUrlParameter<String> {
     
@@ -43,6 +44,23 @@ public class PlaylistView extends Div implements HasUrlParameter<String> {
     }
     @Override
     public void setParameter(BeforeEvent event, String parameter) {
+        String catId = parameter;
+        Explore catExplore = new Explore();
+        if (catId == null) {
+            UI.getCurrent().getPage().setTitle("Playlist | Trackour");
+        }
+        else {
+            catExplore.getCategories().forEach(cat -> {
+                if (cat.getId() != null && cat.getId().equals(catId)) {
+                    if (cat.getName() != null){
+                        UI.getCurrent().getPage().setTitle("Trackour - Playlist - " + cat.getName());
+                    }
+                    else {
+                        UI.getCurrent().getPage().setTitle("Playlist | Trackour");
+                    }
+                }
+            });
+        }
         Playlist p = new Playlist(parameter);
         H1 header = new H1(new Text("Discover !!"));
         contentContainer.add(header);
