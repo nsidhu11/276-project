@@ -3,6 +3,7 @@ package trackour.trackour.views.playlist;
 import java.util.List;
 
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
@@ -56,7 +57,9 @@ public class PlaylistItemsView extends Div implements BeforeEnterObserver {
         for (PlaylistTrack playlistTrack : playlistItem) {
             IPlaylistItem track = playlistTrack.getTrack();
             String trackName = track.getName();
-            // String trackURL = track.getHref();
+            String trackURL = track.getHref();
+            Anchor trackLink = new Anchor(trackURL, trackName);
+            // trackLink.setTarget("_blank");
 
             Image trackImage = null;
             if (track instanceof Track) {
@@ -77,10 +80,10 @@ public class PlaylistItemsView extends Div implements BeforeEnterObserver {
                 trackLayout.add(trackImage);
             }
 
-            Div trackNameDiv = new Div(new H3(new Text(trackName)));
+            Div trackNameDiv = new Div(new H3(trackLink));
+            // trackNameDiv.add(trackLink);
             trackNameDiv.getStyle().set("margin-left", "10px");
             trackNameDiv.getStyle().setWidth("100%");
-            // trackNameDiv.add(visuals);
 
             trackLayout.add(trackNameDiv);
 
