@@ -52,6 +52,7 @@ public class SearchResultView extends VerticalLayout implements BeforeEnterObser
     NavBar navigation;
     PaginatedGrid<Track, Component> grid;
     VerticalLayout container;
+    
     public SearchResultView(SecurityViewService securityViewHandler,
     CustomUserDetailsService customUserDetailsService) {
         this.grid =  new PaginatedGrid<>();
