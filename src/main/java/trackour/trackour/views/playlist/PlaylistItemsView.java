@@ -80,13 +80,13 @@ public class PlaylistItemsView extends Div implements BeforeEnterObserver {
             Div trackNameDiv = new Div(new H3(new Text(trackName)));
             trackNameDiv.getStyle().set("margin-left", "10px");
             trackNameDiv.getStyle().setWidth("100%");
-            trackNameDiv.add(visuals);
+            // trackNameDiv.add(visuals);
 
             trackLayout.add(trackNameDiv);
 
             HorizontalLayout trackList = new HorizontalLayout();
             trackList.add(trackLayout);
-            trackView.add(trackList);
+            trackView.add(trackList, visuals);
         }
         contentContainer.add(trackView);
     }
