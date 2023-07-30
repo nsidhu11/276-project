@@ -18,7 +18,7 @@ import trackour.trackour.views.components.responsive.MyBlockResponsiveLayout;
 @Route("search/advanced")
 @RouteAlias("search/advanced")
 @PreserveOnRefresh
-@PageTitle("Advanced Search | Trackour")
+@PageTitle("Advanced Search Results for [Keyword] | Trackour")
 // Admins are users but also have the "admin" special role so pages that can be
 // viewed by
 // both users and admins should have the admin role specified as well

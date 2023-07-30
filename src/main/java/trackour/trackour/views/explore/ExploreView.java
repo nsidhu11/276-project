@@ -34,7 +34,7 @@ import trackour.trackour.views.components.responsive.MyBlockResponsiveLayout;
 
 @Route("Explore")
 @RouteAlias("explore")
-@PageTitle("Login | Trackour")
+@PageTitle("Explore the Best Playlists for Any Occasion | Trackour")
 @PreserveOnRefresh
 @RolesAllowed({ "USER", "ADMIN" })
 

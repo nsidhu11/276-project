@@ -30,7 +30,7 @@ import trackour.trackour.views.login.LoginPage;
 
 @Route("resetPassword")
 @RouteAlias("reset")
-@PageTitle("Reset Password | Trackour")
+@PageTitle("Forgot Password - Enter Email | Trackour")
 @AnonymousAllowed
 public class enterEmailView extends VerticalLayout implements BeforeLeaveObserver, BeforeEnterObserver {
 
