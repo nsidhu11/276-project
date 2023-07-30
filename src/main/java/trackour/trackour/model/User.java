@@ -197,4 +197,12 @@ public class User {
     public void setFriends(List<Long> friends) {
         this.friends = friends;
     }
+
+    public Set<String> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(Set<String> projects) {
+        this.projects = projects;
+    }
 }
