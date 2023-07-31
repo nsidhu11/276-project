@@ -3,9 +3,9 @@ package trackour.trackour.views.playlist;
 import java.util.List;
 
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Image;
@@ -26,6 +26,7 @@ import trackour.trackour.model.CustomUserDetailsService;
 import trackour.trackour.security.SecurityViewService;
 import trackour.trackour.spotify.PlaylistsItems;
 import trackour.trackour.views.components.NavBar;
+import trackour.trackour.views.api.APIController;
 
 @Route("PlaylistItems/:playlistItemId/:playlistName")
 @RouteAlias("playlistitems")
@@ -60,7 +61,9 @@ public class PlaylistItemsView extends Div implements BeforeEnterObserver {
             for (PlaylistTrack playlistTrack : playlistItem) {
                 IPlaylistItem track = playlistTrack.getTrack();
                 String trackName = track.getName();
-                // String trackURL = track.getHref();
+                String trackURL = APIController.spotifyURL(track.getId());
+                Anchor trackLink = new Anchor(trackURL, trackName);
+                trackLink.setTarget("_blank");
 
                 Image trackImage = null;
                 if (track instanceof Track) {
@@ -88,7 +91,7 @@ public class PlaylistItemsView extends Div implements BeforeEnterObserver {
                     trackLayout.add(trackImage);
                 }
 
-                Div trackNameDiv = new Div(new H2(new Text(trackName)));
+                Div trackNameDiv = new Div(new H3(trackLink));
                 trackNameDiv.getStyle().set("margin-left", "10px");
                 trackNameDiv.getStyle().setWidth("100%");
                 trackNameDiv.add(visuals);
