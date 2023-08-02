@@ -19,6 +19,7 @@ import com.vaadin.flow.router.BeforeLeaveEvent;
 import com.vaadin.flow.router.BeforeLeaveObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
@@ -28,7 +29,8 @@ import trackour.trackour.security.SecurityViewService;
 import trackour.trackour.views.login.LoginPage;
 
 @Route("resetPassword")
-@PageTitle("Reset Password")
+@RouteAlias("reset")
+@PageTitle("Forgot Password - Enter Email | Trackour")
 @AnonymousAllowed
 public class enterEmailView extends VerticalLayout implements BeforeLeaveObserver, BeforeEnterObserver {
 
@@ -117,7 +119,7 @@ public class enterEmailView extends VerticalLayout implements BeforeLeaveObserve
                 // mark token timestamp
                 user.setPasswordResetTokenCreatedAt(LocalDateTime.now());
                 customUserDetailsService.update(user);
-                sendResetLink(currentUrl, token, email);
+                sendResetLink(user.getUsername(), currentUrl, token, email);
             });
 
             // PasswordToken token = new PasswordToken();
@@ -129,7 +131,7 @@ public class enterEmailView extends VerticalLayout implements BeforeLeaveObserve
         }
     }
 
-    void sendResetLink(URL currentUrl, String token, String recipientEmail) {
+    void sendResetLink(String username, URL currentUrl, String token, String recipientEmail) {
         String resetLink = currentUrl.toString() + "/" + token;
         System.out.println("link: " + resetLink);
         ResetLinkService resetLinkHandler = new ResetLinkService(
@@ -140,7 +142,7 @@ public class enterEmailView extends VerticalLayout implements BeforeLeaveObserve
                 recipientEmail,
                 resetLink);
 
-        resetLinkHandler.sendEmail();
+        resetLinkHandler.sendEmail(username);
     }
 
     @Override

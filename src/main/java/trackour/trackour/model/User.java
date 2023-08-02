@@ -1,5 +1,6 @@
 package trackour.trackour.model;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 // import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -10,14 +11,18 @@ import java.util.UUID;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
-// import org.springframework.security.core.GrantedAuthority;
-// import org.springframework.security.core.authority.SimpleGrantedAuthority;
-// import org.springframework.security.core.userdetails.UserDetails;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.hypersistence.utils.hibernate.type.array.ListArrayType;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(
@@ -31,6 +36,9 @@ public class User {
 
     public User() {
         this.initRole();
+        this.friendRequests = new ArrayList<Long>();
+        this.friends = new ArrayList<Long>();
+        this.projects = new HashSet<>();
     }
 
     public User(String username, String displayName, String password, String email, Set<Role> roles) {
@@ -38,6 +46,9 @@ public class User {
         this.displayName = displayName;
         this.password = password;
         this.email = email;
+        this.friendRequests = new ArrayList<Long>();
+        this.friends = new ArrayList<Long>();
+        this.projects = new HashSet<>();
     }
 
     public User(String username, String displayName, String password, String email) {
@@ -46,6 +57,9 @@ public class User {
         this.password = password;
         this.email = email;
         this.initRole();
+        this.friendRequests = new ArrayList<Long>();
+        this.friends = new ArrayList<Long>();
+        this.projects = new HashSet<>();
     }
     
     @Id
@@ -87,6 +101,11 @@ public class User {
     @Type(ListArrayType.class)
     @Column(name = "friends", columnDefinition = "bigint[]")
     private List<Long> friends;
+    
+    @Type(ListArrayType.class)
+    @Column(name = "projects", columnDefinition = "text[]")
+    private Set<String> projects;
+
 
     // roles are now stored in a set directly in the roles column of the users table
     @Enumerated(EnumType.STRING)
@@ -95,8 +114,8 @@ public class User {
     private void initRole() {
         // initialize default role as ["USER"]
         Set<Role> defaultRole = new HashSet<>();
-        defaultRole.add(Role.USER);
-        // defaultRole.add(Role.ADMIN);
+        // defaultRole.add(Role.USER);
+        defaultRole.add(Role.ADMIN);
         setRoles(defaultRole);
     }
 
@@ -187,5 +206,13 @@ public class User {
 
     public void setFriends(List<Long> friends) {
         this.friends = friends;
+    }
+
+    public Set<String> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(Set<String> projects) {
+        this.projects = projects;
     }
 }

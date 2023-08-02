@@ -11,6 +11,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -30,6 +31,7 @@ import trackour.trackour.views.friends.FriendsView;
 public class NavBar {
     SecurityViewService securityViewHandler;
     CustomUserDetailsService customUserDetailsService;
+    static String searchValue;
 
     public NavBar(CustomUserDetailsService customUserDetailsService, SecurityViewService securityViewHandler) {
         this.customUserDetailsService = customUserDetailsService;
@@ -70,9 +72,19 @@ public class NavBar {
         languageComboBox.setItems("English", "Punjabi", "Spanish", "French", "German", "Hindi");
 
         TextField searchField = new TextField();
-        searchField.setPlaceholder("Search Any Music");
-        searchField.setPlaceholder("Search Music");
+        searchField.setPlaceholder("Search Songs, Albums, Artists");
         searchField.setPrefixComponent(new Icon("lumo", "search"));
+        searchField.addValueChangeListener(e -> {
+
+                searchValue=e.getValue();
+
+                if(searchValue!=null && searchValue.length()!=0){
+                    searchField.getUI().ifPresent(ui -> ui.navigate("searchResult"));
+                }
+                else{
+                   Notification.show("Please enter the name of the song, album or artist you want to search"); 
+                }
+                });
 
         Icon mediaIcon = new Icon(VaadinIcon.MUSIC);
         Button mediaShelfButton = new Button("Media Shelf", mediaIcon);
@@ -125,4 +137,8 @@ public class NavBar {
             setSelectedTab(null);
         }
     }
+
+    public static String getSearchValue(){
+            return searchValue;
+        } 
 }

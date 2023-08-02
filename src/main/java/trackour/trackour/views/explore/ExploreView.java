@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
@@ -15,25 +16,36 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
+import com.vaadin.flow.router.RouteAlias;
 
+import jakarta.annotation.security.RolesAllowed;
 import se.michaelthelin.spotify.model_objects.specification.Category;
-
-import trackour.trackour.spotify.explore;
 import trackour.trackour.model.CustomUserDetailsService;
 import trackour.trackour.security.SecurityViewService;
+import trackour.trackour.spotify.Explore;
+import trackour.trackour.views.components.NavBar;
+import trackour.trackour.views.components.responsive.MyBlockResponsiveLayout;
 
 @Route("Explore")
-@PageTitle("Login")
-@AnonymousAllowed
+@RouteAlias("explore")
+@PageTitle("Explore the Best Playlists for Any Occasion | Trackour")
+@PreserveOnRefresh
+@RolesAllowed({ "USER", "ADMIN" })
 
-public class ExploreView extends VerticalLayout {
+public class ExploreView extends MyBlockResponsiveLayout {
+
+    private final String CATEGORY_CARD_SIZE = "12.5rem";
+
     public ExploreView(SecurityViewService securityViewHandler,
             CustomUserDetailsService customUserDetailsService) {
+
+        Explore xplore = new Explore();
 
         Optional<UserDetails> username = securityViewHandler.getSessionOptional();
         String sessionUsername = username.get().getUsername();
@@ -50,47 +62,77 @@ public class ExploreView extends VerticalLayout {
         greetings.setAlignItems(FlexComponent.Alignment.START);
         greetings.add(header, smileSpan);
 
-        add(greetings);
-        List<Category> categories = explore.getCategories();
+        // greetings
+        List<Category> categories = xplore.getCategories();
 
-        int columns = 5;
-        VerticalLayout categoryLayout = new VerticalLayout();
-        categoryLayout.setWidth("100%");
+        // int columns = 5;
+        FlexLayout categoryLayout = new FlexLayout();
+        categoryLayout.setFlexGrow(1);
+        categoryLayout.setWidthFull();
+        // categoryLayout.setSizeFull();
+        categoryLayout.getStyle().set("display", "flex");
+        categoryLayout.getStyle().set("flex-wrap", "wrap");
+        categoryLayout.setAlignItems(FlexLayout.Alignment.CENTER);
+        categoryLayout.setJustifyContentMode(FlexLayout.JustifyContentMode.CENTER);
+        // categoryLayout.getStyle().setBackground("cyan");
 
-        HorizontalLayout rowLayout = new HorizontalLayout();
-        rowLayout.setWidth("100%");
+        try {
+            for (Category category : categories) {
+                Image coverImage = new Image(category.getIcons()[0].getUrl(), "Category Cover");
+                coverImage.setWidth(CATEGORY_CARD_SIZE);
+                coverImage.setHeight(CATEGORY_CARD_SIZE);
 
-        int counter = 0;
+                Button catButton = new Button(coverImage);
+                catButton.getStyle().setWidth(CATEGORY_CARD_SIZE);
+                catButton.getStyle().setHeight(CATEGORY_CARD_SIZE);
+                catButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
-        for (Category category : categories) {
-            Image coverImage = new Image(category.getIcons()[0].getUrl(), "Category Cover");
-            coverImage.setWidth("200px");
-            coverImage.setHeight("200px");
+                Div categoryInfo = new Div(new Text(category.getName()));
+                categoryInfo.setWidth(CATEGORY_CARD_SIZE);
 
-            Button catButton = new Button(coverImage);
-            catButton.getStyle().setWidth("200px");
-            catButton.getStyle().setHeight("200px");
-            catButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+                VerticalLayout catLayout = new VerticalLayout();
+                catLayout.add(catButton, categoryInfo);
+                catLayout.getStyle().setWidth("auto");
+                catLayout.getStyle().setHeight("auto");
 
-            Div categoryInfo = new Div(new Text(category.getName()));
-            categoryInfo.setWidth("200px");
+                catButton.addClickListener(event -> {
+                    System.out
+                            .println("Button clicked for category: " + category.getName() + " with ID "
+                                    + category.getId());
+                    UI.getCurrent().navigate("Playlists/" + category.getId() + "/" + category.getName());
 
-            VerticalLayout catLayout = new VerticalLayout();
-            catLayout.add(catButton, categoryInfo);
+                });
 
-            if (counter % columns == 0 && counter > 0) {
-                categoryLayout.add(rowLayout);
-                rowLayout = new HorizontalLayout(); // Create a new rowLayout
-                rowLayout.setWidth("100%");
+                // if (counter % columns == 0 && counter > 0) {
+                // categoryLayout.add(rowLayout);
+                // rowLayout = new HorizontalLayout(); // Create a new rowLayout
+                // rowLayout.setWidth("100%");
+                // }
+
+                // catLayout.getStyle().setBackground("cyan");
+                // catLayout.getStyle().setMargin("1rem");
+                // categoryLayout.getStyle().setBackground("red");
+                categoryLayout.add(catLayout);
+                // counter++;
             }
-
-            rowLayout.add(catLayout);
-            counter++;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        if (rowLayout.getComponentCount() > 0) {
-            categoryLayout.add(rowLayout);
-        }
-        add(categoryLayout);
+        // if (rowLayout.getComponentCount() > 0) {
+        // categoryLayout.add(rowLayout);
+        // }
+
+        // container for the main contents of this page
+        VerticalLayout contentContainer = new VerticalLayout();
+        contentContainer.setSizeFull();
+        contentContainer.add(
+                greetings,
+                categoryLayout);
+
+        // generate responsive navbar
+        NavBar nav = new NavBar(customUserDetailsService, securityViewHandler);
+        nav.setContent(contentContainer);
+        add(nav);
     }
 }

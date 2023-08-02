@@ -15,18 +15,30 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
-public class newReleases {
-    private static final String accessToken = clientCred.getAccessToken();
-    private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
-            .setAccessToken(accessToken)
-            .build();
-    private static final GetListOfNewReleasesRequest getListOfNewReleasesRequest = spotifyApi.getListOfNewReleases()
-            // .country(CountryCode.SE)
-            // .limit(10)
-            // .offset(0)
-            .build();
+public class NewReleases {
+    
+    private ClientCred clientCred;
+    private String accessToken;
+    private SpotifyApi spotifyApi;
+    private GetListOfNewReleasesRequest getListOfNewReleasesRequest;
+    public NewReleases () {
+        initialize();
+    }
 
-    public static void getListOfNewReleases_Sync() {
+    private void initialize() {
+        this.clientCred = new ClientCred();
+        this.accessToken = clientCred.getAccessToken();
+        this.spotifyApi = new SpotifyApi.Builder()
+                .setAccessToken(accessToken)
+                .build();
+        this.getListOfNewReleasesRequest = spotifyApi.getListOfNewReleases()
+                // .country(CountryCode.SE)
+                // .limit(10)
+                // .offset(0)
+                .build();
+    }
+    public void getListOfNewReleases_Sync() {
+        initialize();
         try {
             final Paging<AlbumSimplified> albumSimplifiedPaging = getListOfNewReleasesRequest.execute();
 
@@ -36,7 +48,8 @@ public class newReleases {
         }
     }
 
-    public static void getListOfNewReleases_Async() {
+    public void getListOfNewReleases_Async() {
+        initialize();
         try {
             final CompletableFuture<Paging<AlbumSimplified>> pagingFuture = getListOfNewReleasesRequest.executeAsync();
             final Paging<AlbumSimplified> albumSimplifiedPaging = pagingFuture.join();
@@ -54,7 +67,9 @@ public class newReleases {
         }
     }
 
-    public static List<AlbumSimplified> getNewReleases() {
+    public List<AlbumSimplified> getNewReleases() {
+
+        initialize();
 
         final CompletableFuture<Paging<AlbumSimplified>> pagingFuture = getListOfNewReleasesRequest.executeAsync();
         final Paging<AlbumSimplified> albumSimplifiedPaging = pagingFuture.join();

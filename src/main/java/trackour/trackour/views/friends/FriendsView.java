@@ -1,33 +1,35 @@
 package trackour.trackour.views.friends;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.Icon;
-
 import java.util.List;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.*;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.PreserveOnRefresh;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
 
 import jakarta.annotation.security.RolesAllowed;
-
 import trackour.trackour.model.CustomUserDetailsService;
 import trackour.trackour.model.User;
 import trackour.trackour.security.SecurityViewService;
-import trackour.trackour.views.home.NavBar;
+import trackour.trackour.views.components.NavBar;
 
 @Route("friends")
-@PageTitle("Friends")
+@RouteAlias("friends")
+@PageTitle("Friends | Trackour")
+@PreserveOnRefresh
 @RolesAllowed({"ADMIN", "USER"})
-public class FriendsView extends VerticalLayout{
+public class FriendsView extends VerticalLayout {
     SecurityViewService securityViewHandler;
     SecurityViewService securityService;
     CustomUserDetailsService customUserDetailsService;
@@ -47,8 +49,6 @@ public class FriendsView extends VerticalLayout{
 
             this.currentUser = customUserDetailsService.getByUsername(securityService.getAuthenticatedRequestSession().getUsername()).get();
 
-            NavBar navigation = new NavBar(customUserDetailsService, securityViewHandler);
-
             H3 friendRequestTitle = new H3("Add a new friend");
             TextField friendRequestInput = new TextField("Enter Username");
 
@@ -65,30 +65,56 @@ public class FriendsView extends VerticalLayout{
             configureFriendsGrid();
 
             addClassName("friends-view");
-            setSizeFull();
+            // setSizeFull();
 
-            HorizontalLayout layout = new HorizontalLayout();
+            // HorizontalLayout layout = new HorizontalLayout();
+            FlexLayout layout = new FlexLayout();
+            // layout.getStyle().setBackground("red");
+            layout.setFlexGrow(1);
+            layout.setHeightFull();
+            // categoryLayout.setSizeFull();
+            layout.getStyle().set("display", "flex");
+            layout.getStyle().set("flex-wrap", "wrap");
+
+            // Set the flex direction to row (horizontal)
+            layout.setFlexDirection(FlexLayout.FlexDirection.COLUMN);
+
+            // // Set the flex wrap to wrap (vertical when needed)
+            layout.setFlexWrap(FlexLayout.FlexWrap.WRAP);
+
+            // You can also set the alignment and justify content properties as you like
+            // layout.setAlignItems(FlexLayout.Alignment.CENTER);
+            // layout.setJustifyContentMode(FlexLayout.JustifyContentMode.CENTER);
+            
 
             VerticalLayout friendRequestLayout = new VerticalLayout();
             VerticalLayout currentFriendsLayout = new VerticalLayout();
+            // friendRequestLayout.setWidth("50%");
+            // friendRequestLayout.getStyle().setBackground("cyan");
+
+            // currentFriendsLayout.setWidth("50%");
+            // currentFriendsLayout.getStyle().setBackground("cyan");
 
             FormLayout friendRequestForm = new FormLayout();
 
-            friendRequestForm.setSizeFull();
+            // friendRequestForm.setSizeFull();
             friendRequestForm.add(friendRequestInput, friendRequestButton, confirmationText);
 
-            friendRequestLayout.setSizeFull();
+            // friendRequestLayout.setSizeFull();
             friendRequestLayout.add(friendRequestTitle, friendRequestForm,
                                         pendingFriendRequest, friendRequestGrid);
-
-            currentFriendsLayout.setSizeFull();
+// 
+            // currentFriendsLayout.setSizeFull();
             currentFriendsLayout.add(currentFriendsTitle, currentFriendsGrid);
 
-
-            layout.setSizeFull();
             layout.add(friendRequestLayout, currentFriendsLayout);
 
-            add(navigation.generateNavBar(), layout);
+            // Create a responsive navbar component
+            NavBar navbar = new NavBar(customUserDetailsService, securityViewHandler);
+            // Add some content below the navbar
+            navbar.setContent(layout);
+            // Add it to the view
+            add(navbar);
             
 
             //User currentUser = customUserDetailsService.getByUsername(securityService.getAuthenticatedUser().getUsername()).get();
@@ -116,7 +142,7 @@ public class FriendsView extends VerticalLayout{
     //friend request grid
     private void configureRequestGrid() {
         this.friendRequestGrid.addClassNames("friend-requests-grid");
-        this.friendRequestGrid.setSizeFull();
+        // this.friendRequestGrid.setSizeFull();
         this.friendRequestGrid.addColumn(User::getUsername).setHeader("Username");
         this.friendRequestGrid.addComponentColumn((ev) -> addFriendButton(ev));
         this.friendRequestGrid.addComponentColumn((ev) -> deleteFriendRequestButton(ev));
@@ -127,7 +153,7 @@ public class FriendsView extends VerticalLayout{
     //friends grid
     private void configureFriendsGrid() {
         this.currentFriendsGrid.addClassNames("friends-grid");
-        this.currentFriendsGrid.setSizeFull();
+        // this.currentFriendsGrid.setSizeFull();
         this.currentFriendsGrid.addColumn(User::getUsername).setHeader("Username");
         this.currentFriendsGrid.addComponentColumn((ev) -> deleteFriendButton(ev));
         this.currentFriendsGrid.getColumns().forEach(col -> col.setAutoWidth(true));
@@ -269,4 +295,11 @@ public class FriendsView extends VerticalLayout{
 
         return button;
     }
+
+    // @Override
+    // public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+    //     // this method call reroutes get requests to this view if the current session is already authenticated
+    //     // getUI().get().getPage().addJavaScript("window.location.href = 'myurl'");
+    //     this.securityViewHandler.handleAnonymousOnly(beforeEnterEvent, false);
+    // }
 }
